@@ -52,6 +52,8 @@
      <Compile Include="Assets\Core\BehaviorBase.cs" />
      <Compile Include="Assets\Core\Extensions.cs" />
      <Compile Include="Assets\Core\Prototype.cs" />
+     <Compile Include="Assets\Core\UIBehavior.cs" />
+     <Compile Include="Assets\HUDButtonTest.cs" />
      <Compile Include="Assets\Projectiles\Ammo.cs" />
      <Compile Include="Assets\Projectiles\Bullet.cs" />
      <Compile Include="Assets\Projectiles\Gun.cs" />

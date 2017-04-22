@@ -46,15 +46,15 @@ public class Gun : BehaviorBase
 		switch(state)
 		{
 			case State.Ready:
-			if (fire)
-			{
-				state = State.Load;
-			}
+				if (fire)
+				{
+					state = State.Load;
+				}
 
-			if (Input.GetButtonDown("Fire2"))
-			{
-				ChangeAmmo();
-			}
+				if (Input.GetButtonDown("Fire2"))
+				{
+					ChangeAmmo();
+				}
 			break;
 
 			case State.Load:
