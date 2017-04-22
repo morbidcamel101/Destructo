@@ -14,12 +14,13 @@ public class HUDButtonTest : MonoBehaviour
     public void Start()
     {
         score = 0;
+        SetScoreText();
     }
 
 	public void ScoreIncrease()
     {
         score = score + 1000;
-        scoreText.text = string.Format("Score: {0}", Convert.ToInt32(score));
+        SetScoreText();
         
     }
 
@@ -32,6 +33,12 @@ public class HUDButtonTest : MonoBehaviour
             score = 0;
         }
 
-        scoreText.text = string.Format("Score: {0}", Convert.ToInt32(score));
+        SetScoreText();
+    }
+
+    private void SetScoreText()
+    {
+        if (scoreText != null)
+            scoreText.text = string.Format("Score: {0}", Convert.ToInt32(score));
     }
 }
