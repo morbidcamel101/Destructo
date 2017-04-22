@@ -54,15 +54,12 @@ public class Spawner : BehaviorBase
 			{
 				obj = objects[i];
 
-				if (obj == null || !obj.activeSelf || obj)
-					break;
+				if (obj.activeSelf)
+					continue;
 
 				cacheIndex = (cacheIndex + 1) % cacheSize;
+				return obj;
 			}
-			if (obj == null)
-					return null;
-
-			cacheIndex = (cacheIndex + 1) % cacheSize;
 			return obj;
 		}
 
@@ -180,7 +177,7 @@ public class Spawner : BehaviorBase
 
 	private static GameObject CreateObject (ObjectCache cache)
 	{
-		var res = cache.prototype != null ? MonoBehaviour.Instantiate (cache.prefab, spawner.cacheRoot.transform) :  MonoBehaviour.Instantiate (cache.prefab) as GameObject;
+		var res = cache.prototype != null ? MonoBehaviour.Instantiate (cache.prefab, cache.prototype.transform) :  MonoBehaviour.Instantiate (cache.prefab, spawner.cacheRoot.transform) as GameObject;
 		if (cache.prototype != null)
 		{
 			res.transform.Align(cache.prototype);
@@ -188,6 +185,12 @@ public class Spawner : BehaviorBase
 		}
 		spawner.Organize (res, cache);
 		return res;
+	}
+
+	private static GameObject CreateObject (GameObject prefab)
+	{
+		
+		return MonoBehaviour.Instantiate(prefab, spawner.cacheRoot.transform);
 	}
 
 
@@ -200,9 +203,11 @@ public class Spawner : BehaviorBase
 			return null;
 		}
 
+		spawner.Ensure(prefab, "prefab");
+
 		var cache = spawner.GetCacheForPrefab(prefab);
 		if (cache == null) 
-			return CreateObject (cache);
+			return CreateObject (prefab);
 		
 		// Get available  object in the cache
 		var obj = cache.Next();
@@ -210,11 +215,22 @@ public class Spawner : BehaviorBase
 			return null;
 
 		if (obj == null) 
-			return CreateObject(cache);
-		
-		// Recycle!
+		{
+			spawner.Log("Cache unavailable for {0} -- increase cache size??", prefab);
+			return CreateObject(cache); // Cache Leak??
+		}
+
+		if (cache.prototype != null && position == Vector3.zero)
+		{
+			position = cache.prototype.transform.position;
+			rotation = cache.prototype.transform.rotation;
+			
+		}
+
 		obj.transform.position = position;
 		obj.transform.rotation = rotation;
+		
+
 		obj.SetActive(true);
 
 		if (!spawner.activeObjects.ContainsKey(obj))
@@ -233,6 +249,7 @@ public class Spawner : BehaviorBase
 
 		var destroy = (GameObject)objectToDestroy;
 
+		// Is it in the cache and being tracked?
 		if (spawner.activeObjects.ContainsKey(destroy))
 		{
 			if (delay <= 0)
