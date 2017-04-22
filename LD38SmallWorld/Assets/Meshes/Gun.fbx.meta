@@ -26,6 +26,7 @@ ModelImporter:
     4300004: Arm
     7400000: Recoil
     7400002: GunIdle
+    7400004: Reload
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -132,6 +133,44 @@ ModelImporter:
       - path: Barrel
         weight: 1
       - path: Handle
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Reload
+      takeName: Take 001
+      firstFrame: 25
+      lastFrame: 72
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Arm
+        weight: 1
+      - path: Main
+        weight: 1
+      - path: Main/Barrel
+        weight: 1
+      - path: Main/Handle
         weight: 1
       maskType: 3
       maskSource: {instanceID: 0}

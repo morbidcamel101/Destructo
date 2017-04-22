@@ -99,7 +99,10 @@ public class Gun : BehaviorBase
 
 			case State.Reload:
 			resumeTime = Time.time + reloadTime;
-			// TODO - Kick off animation
+
+			anim.SetBool("Reload", true);
+			anim.SetFloat("ReloadSpeed", (2f/reloadTime));
+
 			state = State.Reloading;			
 			break;
 
@@ -119,6 +122,8 @@ public class Gun : BehaviorBase
 				state = State.Empty;
 				break;
 			}
+
+			anim.SetBool("Reload", false);
 			// Todo - cleanup animation and sound 
 			state = State.Ready;
 			break;
