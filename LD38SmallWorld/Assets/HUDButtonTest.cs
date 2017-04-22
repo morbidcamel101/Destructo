@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class HUDButtonTest : MonoBehaviour
 {
-
     public Text scoreText;
 
     private int score = 0;
