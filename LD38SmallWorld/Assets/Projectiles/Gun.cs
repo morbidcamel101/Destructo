@@ -13,20 +13,24 @@ public class Gun : BehaviorBase
 	public int clipSize = 60;
 	public int currentClip = 60;
 	public float changeTime = 0.5f;
-	public Bullet chamber = null;
-
+	public float range = 10000;
+	public Transform gunChamber;
+	public Transform hand;
+	private Bullet chamber = null;
 	private float resumeTime;
-
 	private Ammo currentAmmo;
-
 	private bool fire;
+	private Animator anim;
+
 
 	// Use this for initialization
 	void Start ()
 	{
+		Ensure(gunChamber);
 		this.Assert(ammo.Length > 0, "No ammo assigned!");
 		currentAmmo = ammo[0];
 		Ensure(currentAmmo.bulletType, "Invalid Ammo Assigned!");
+		anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -42,7 +46,6 @@ public class Gun : BehaviorBase
 		{
 			fire = false;
 		}
-
 		switch(state)
 		{
 			case State.Ready:
@@ -68,6 +71,7 @@ public class Gun : BehaviorBase
 
 			var bulletObj = Spawner.Spawn(currentAmmo.bulletType.prefab, false);
 			chamber = bulletObj.GetComponent<Bullet>();
+			anim.SetBool("Fire", true);
 			state = State.Loading;
 			break;
 
@@ -86,11 +90,11 @@ public class Gun : BehaviorBase
 			break; 
 
 			case State.Fire:
-
-			chamber.enabled = true;
-			chamber = null; // Make ready for the next bullet
-			//fire = false;
-			state = State.Ready;
+				anim.SetBool("Fire", false);
+				chamber.enabled = true;
+				chamber = null; // Make ready for the next bullet
+				//fire = false;
+				state = State.Ready;
 			break;
 
 			case State.Reload:
@@ -126,6 +130,33 @@ public class Gun : BehaviorBase
 			}
 			break;
 		}
+	}
+
+	void FixedUpdate()
+	{
+		// http://answers.unity3d.com/questions/13022/aiming-gun-at-cursor.html
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition); //Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+
+		Vector3 target;
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit))
+			target = hit.point;
+		else
+			target = ray.GetPoint(100);
+
+		hand.LookAt(hit.point);
+		gunChamber.LookAt(hit.point);
+	}
+
+	void RecoilStart()
+	{
+		
+	}
+
+	void RecoilEnd()
+	{
+		if (fire)
+			anim.SetBool("Fire", true);
 	}
 
 

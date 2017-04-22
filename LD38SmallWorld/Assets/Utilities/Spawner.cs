@@ -199,7 +199,10 @@ public class Spawner : BehaviorBase
 		return MonoBehaviour.Instantiate(prefab, spawner.cacheRoot.transform);
 	}
 
-
+	public static GameObject Spawn(Prototype prototype, bool cacheOnly = false, Vector3 position = default(Vector3), Quaternion rotation = default(Quaternion))
+	{
+		return Spawn(prototype.prefab, cacheOnly, position, rotation);
+	}
 
 	public static GameObject Spawn(GameObject prefab, bool cacheOnly = false, Vector3 position = default(Vector3), Quaternion rotation = default(Quaternion))
 	{
@@ -244,6 +247,8 @@ public class Spawner : BehaviorBase
 
 		return obj;
 	}
+
+
 
 	public static void Recycle(UnityEngine.Object objectToDestroy, float delay = 0f)
 	{
