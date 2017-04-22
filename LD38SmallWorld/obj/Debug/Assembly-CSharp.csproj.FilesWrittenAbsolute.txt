@@ -7,6 +7,8 @@
 /Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/UnityEngine.Analytics.dll
 /Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/UnityEngine.HoloLens.dll
 /Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/UnityEngine.VR.dll
+/Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/Assembly-CSharp-firstpass.dll
+/Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/Assembly-CSharp-firstpass.dll.mdb
 /Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/Mono.Cecil.dll
 /Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/Unity.SerializationLogic.dll
 /Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/Unity.DataContract.dll
@@ -20,5 +22,3 @@
 /Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/Assembly-CSharp.dll
 /Users/johanotto/LudumDare38/LD38SmallWorld/obj/Debug/Assembly-CSharp.dll
 /Users/johanotto/LudumDare38/LD38SmallWorld/obj/Debug/Assembly-CSharp.dll.mdb
-/Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/Assembly-CSharp-firstpass.dll
-/Users/johanotto/LudumDare38/LD38SmallWorld/Temp/bin/Debug/Assembly-CSharp-firstpass.dll.mdb

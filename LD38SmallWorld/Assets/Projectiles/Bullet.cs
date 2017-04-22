@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 
 [AddComponentMenu("Small World/Bullet")]
@@ -12,6 +13,11 @@ public class Bullet : BehaviorBase
 
 	private Transform trans;
 	private float spawnTime;
+
+	void Awake()
+	{
+		enabled = false;
+	}
 
 
 	// Use this for initialization
@@ -26,11 +32,31 @@ public class Bullet : BehaviorBase
 	{
 		trans.position += trans.forward * speed * Time.deltaTime;
 		distance -= speed * Time.deltaTime;
-		if (Time.time > spawnTime + lifeTime || distance < 0)
+		if ((Time.time > spawnTime + lifeTime || distance < 0) && Expired())
 		{
-			// TODO - Recyce
+			Expired();
+			Spawner.Recycle(gameObject);
 		}
+		// Todo -- Hit
 	
+	}
+
+	public virtual void Shoot()
+	{
+		enabled = true;
+	}
+
+	public virtual void Hit() 
+	{
+		enabled = false;
+		throw new NotImplementedException();
+	}
+
+	public virtual bool Expired()
+	{
+		
+		enabled = false;
+		return true; // Yes - We expired
 	}
 }
 
