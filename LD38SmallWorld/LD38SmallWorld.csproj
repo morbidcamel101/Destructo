@@ -86,11 +86,14 @@
   <ItemGroup>
     <Compile Include="Assets\AI\Player.cs" />
     <Compile Include="Assets\AI\Thug.cs" />
+    <Compile Include="Assets\AmmoMeterManager.cs" />
     <Compile Include="Assets\ButtonManager.cs" />
     <Compile Include="Assets\Core\BehaviorBase.cs" />
     <Compile Include="Assets\Core\Extensions.cs" />
     <Compile Include="Assets\Core\Prototype.cs" />
+    <Compile Include="Assets\Core\UIBehavior.cs" />
     <Compile Include="Assets\HUDButtonTest.cs" />
+    <Compile Include="Assets\HealthMeterManager.cs" />
     <Compile Include="Assets\Projectiles\Ammo.cs" />
     <Compile Include="Assets\Projectiles\Bullet.cs" />
     <Compile Include="Assets\Projectiles\Gun.cs" />
