@@ -80,7 +80,7 @@ public class Spawner : BehaviorBase
 
 	public static Spawner spawner;
 	// Use this for initialization
-	void Awake ()
+	void Start ()
 	{
 		spawner = this;
 
@@ -177,11 +177,17 @@ public class Spawner : BehaviorBase
 
 	private static GameObject CreateObject (ObjectCache cache)
 	{
-		var res = cache.prototype != null ? MonoBehaviour.Instantiate (cache.prefab, cache.prototype.transform) :  MonoBehaviour.Instantiate (cache.prefab, spawner.cacheRoot.transform) as GameObject;
+		if (!spawner.cacheRoot || !cache.prefab)
+			throw new InvalidProgramException("Cache root or cache prefab is not configured");
+		var res = MonoBehaviour.Instantiate (cache.prefab);
 		if (cache.prototype != null)
 		{
 			res.transform.Align(cache.prototype);
 			res.transform.SetParent(cache.prototype.transform, false);
+		}
+		else
+		{	
+			res.transform.SetParent(spawner.cacheRoot.transform);
 		}
 		spawner.Organize (res, cache);
 		return res;
