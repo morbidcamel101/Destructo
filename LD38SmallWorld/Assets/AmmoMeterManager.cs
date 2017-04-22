@@ -6,14 +6,17 @@ using UnityEngine.UI;
 
 public class AmmoMeterManager : MonoBehaviour
 {
-    private float fillAmount;
+    public float totalAmmo = 200f;
+    public float currentAmmo = 200f;
+    public float lowPercentage = 0.5f;
+    public float criticalPercentage = 0.2f;
 
     public Image content;
 
     // Use this for initialization
     void Start()
     {
-        fillAmount = 100;
+        currentAmmo = 200;
     }
 
     // Update is called once per frame
@@ -24,26 +27,31 @@ public class AmmoMeterManager : MonoBehaviour
 
     private void HandleAmmoMeterDisplay()
     {
-        content.fillAmount = AmmoFillAmount(fillAmount, 0, 100, 0, 1);
+        content.fillAmount = AmmoFillAmount(currentAmmo, 0, totalAmmo, 0, 1);
+
+        if (content.fillAmount <= criticalPercentage)
+        {
+            // Display Reload text
+        }
     }
 
-    private float AmmoFillAmount(float healthVal, float inMinHealthVal, float inMaxHealthVal, float outMinFillVal, float outMaxFillVal)
+    private float AmmoFillAmount(float ammoVal, float inMinAmmoVal, float inMaxAmmoVal, float outMinFillVal, float outMaxFillVal)
     {
-        return (healthVal - inMinHealthVal) * (outMaxFillVal - outMinFillVal) / (inMaxHealthVal - inMinHealthVal) + outMinFillVal;
+        return (ammoVal - inMinAmmoVal) * (outMaxFillVal - outMinFillVal) / (inMaxAmmoVal - inMinAmmoVal) + outMinFillVal;
     }
 
     public void AmmoIncrease()
     {
         // Test relaod back to full capacity
-        fillAmount = 100;
+        currentAmmo = totalAmmo;
     }
 
     public void AmmoDecrease()
     {
         // Test
-        fillAmount = fillAmount - 2;
+        currentAmmo = currentAmmo - 2;
 
-        if (fillAmount < 0)
-            fillAmount = 0;
+        if (currentAmmo < 0)
+            currentAmmo = 0;
     }
 }
