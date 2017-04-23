@@ -9,6 +9,7 @@ public class Bullet : BehaviorBase
 	public float speed = 10;
 	public float lifeTime = 0.5f;
 	public float distance = 10000;
+	public float damage = 10f;
 
 	private Transform trans;
 	private float spawnTime;

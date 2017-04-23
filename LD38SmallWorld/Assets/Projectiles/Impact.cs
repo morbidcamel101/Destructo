@@ -4,13 +4,8 @@ using UnityEngine;
 [AddComponentMenu("Small World/Impact")]
 public class Impact: BehaviorBase
 {
-	public Prototype effect;
 	public float duration = 3;
 
-	void Awake()
-	{
-		Ensure(effect.prefab);
-	}
 
 	void OnTriggerEnter(Collider other) {
 
@@ -29,6 +24,9 @@ public class Impact: BehaviorBase
 		if (!(bullet = t.GetComponent<Bullet>()))
 			return;
 
+		var material = collision.collider.material;
+		Prototype effect = MaterialImpactManager.Instance[material].effect;
+
 		foreach(var contact in collision.contacts)
 		{
 			Debug.DrawRay(contact.point, contact.normal, Color.red);
@@ -39,9 +37,7 @@ public class Impact: BehaviorBase
 		}
 
 		// TODO Kick off audio
-
-
-
+		SendMessage("OnImpact", bullet, SendMessageOptions.DontRequireReceiver);
 	}
 }
 
