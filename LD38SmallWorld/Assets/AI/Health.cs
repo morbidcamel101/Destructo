@@ -138,5 +138,11 @@ public sealed class Health: BehaviorBase
         if (currentHealth < 0)
             currentHealth = 0;
     }
+
+    public void Reset()
+    {
+    	this.currentHealth = this.totalHealth;
+    	this.dead = false;
+    }
 }
 

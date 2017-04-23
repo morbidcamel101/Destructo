@@ -18,6 +18,10 @@ public abstract class CharacterBase: BehaviorBase
 
 	protected abstract void OnLowHealth();
 
+	public virtual void Randomize()
+	{
+	}
+
 	public Holdster[] holdsters; // Desscribe the guns
 
 

@@ -54,7 +54,7 @@ public class Spawner : BehaviorBase
 			{
 				obj = objects[i];
 
-				if (obj.activeSelf)
+				if (obj != null && obj.activeSelf)
 					continue;
 
 				cacheIndex = (cacheIndex + 1) % cacheSize;

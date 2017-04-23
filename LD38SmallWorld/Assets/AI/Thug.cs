@@ -64,13 +64,22 @@ public class Thug : CharacterBase
 				break;
 
 			case State.Attacking:
+				if (!currentTarget)
+				{
+					state = State.Attacked;
+				}
 				FireAt(currentTarget.transform);
 
 				
 				if (!LockOn())
 				{
-					state = State.Seeking;
+					state = State.Attacked;
 				}
+				break;
+
+			case State.Attacked:
+				// TODO - Reload?
+				state = State.Seeking;
 				break;
 		}
 	}
@@ -97,7 +106,7 @@ public class Thug : CharacterBase
 
 	protected override void OnDeath ()
 	{
-		throw new NotImplementedException(); // TODO
+		CharacterManager.Instance.Dead(this.gameObject);
 	}
 
 	protected override void OnCriticalHealth ()
@@ -114,8 +123,20 @@ public class Thug : CharacterBase
 
 	protected override void OnImpact (Bullet bullet)
 	{
-		currentTarget = bullet.GetComponentInParent<CharacterBase>();
-		this.Ensure(currentTarget, "Bullet not shot from a character?");
+		var source = bullet.GetComponentInParent<CharacterBase>();
+		/*if (source is Thug)
+		{
+			return; // Immune to other robot damage
+		}*/
+		currentTarget = source;
+		//this.Ensure(currentTarget, "Bullet not shot from a character?");
+	}
+
+	public override void Randomize ()
+	{
+		this.strengthMultiplier = UnityEngine.Random.Range(1f, CharacterManager.Instance.strengthMultiplier);
+		this.Health.Reset();
+		base.Randomize ();
 	}
 }
 

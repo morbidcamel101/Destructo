@@ -10,3 +10,4 @@ public sealed class CharacterDefinition
 	public Prototype character;
 
 }
+
