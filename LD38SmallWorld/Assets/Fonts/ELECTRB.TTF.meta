@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 17c87f596aa3d6747bf9f6ce5ff6c795
+timeCreated: 1492987330
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Electrofied
+  fontNames:
+  - Electrofied
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
