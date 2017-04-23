@@ -97,6 +97,7 @@
     <Compile Include="Assets\Projectiles\Ammo.cs" />
     <Compile Include="Assets\Projectiles\Bullet.cs" />
     <Compile Include="Assets\Projectiles\Gun.cs" />
+    <Compile Include="Assets\Projectiles\Impact.cs" />
     <Compile Include="Assets\Terrain.cs" />
     <Compile Include="Assets\Utilities\Spawner.cs" />
   </ItemGroup>
