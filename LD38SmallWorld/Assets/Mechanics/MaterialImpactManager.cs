@@ -20,20 +20,39 @@ public class MaterialImpactManager : BehaviorBase
 	public static MaterialImpactManager Instance
 	{
 		get {
-			return _instance ?? (_instance = new MaterialImpactManager());
+			CheckValid();
+			return _instance  ;
 		}
 	}
 
-	public ImpactEffect this[PhysicMaterial material]
+	private static void CheckValid()
 	{
-		get {
-			if (material == null)
-			{
-				Debug.LogError("The material cannot be null - management");
-				return null;
-			}
-			return impactEffects.FirstOrDefault(i => i.material == material);
+		if (_instance == null)
+					throw new InvalidOperationException("Material Manager not initialized!");
+	}
+
+
+
+	public ImpactEffect GetImpactEffect(Collider collider)
+	{
+		if (collider == null)
+			return null;
+
+		return GetImpactEffect(collider.material);
+	}
+
+	public ImpactEffect GetImpactEffect(PhysicMaterial material)
+	{
+		if (material == null)
+		{
+			return null;
 		}
+		return material == null ? null : impactEffects.FirstOrDefault(i => i.material == material);
+	}
+
+	void Awake()
+	{
+		_instance = this;
 	}
 }
 

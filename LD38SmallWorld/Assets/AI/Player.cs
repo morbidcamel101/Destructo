@@ -28,6 +28,11 @@ public class Player: CharacterBase
 	{
 		Log("HEALTH IS LOW!!");
 	}
+
+	protected override void OnImpact (Bullet bullet)
+	{
+		throw new NotImplementedException ();
+	}
 }
 
 

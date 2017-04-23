@@ -19,7 +19,7 @@ public sealed class Health: BehaviorBase
 
 	void OnEnable()
 	{
-		
+		StartCoroutine(Regenerate());
 	}
 
 	void OnImpact(Bullet bullet)
