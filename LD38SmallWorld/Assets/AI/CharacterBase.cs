@@ -65,14 +65,7 @@ public abstract class CharacterBase: BehaviorBase
 
 	public Health Health { get { return this.GetComponent<Health>(); } }
 
-	public Player Player {
-		get 
-		{ 
-			var obj = GameObject.FindGameObjectWithTag("Player"); 
-
-			return obj != null ? obj.GetComponent<Player>() : default(Player);
-		}
-	}
+	
 
 }
 
