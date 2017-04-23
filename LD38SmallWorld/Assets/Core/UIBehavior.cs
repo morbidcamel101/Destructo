@@ -13,6 +13,8 @@ public abstract class UIBehavior: BehaviorBase
 		if (Time.time < resumeTime)
 			return;
 
+		resumeTime = Time.time + updateInterval;
+
 		UpdateUI();
 	}
 
