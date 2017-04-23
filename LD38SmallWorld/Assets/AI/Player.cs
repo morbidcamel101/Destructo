@@ -7,6 +7,8 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class Player: CharacterBase
 {
 
+	public int score = 0;
+
 	void Update()
 	{
 		if (Input.GetButtonDown("Fire1"))

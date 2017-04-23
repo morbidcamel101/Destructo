@@ -124,11 +124,14 @@ public class Thug : CharacterBase
 	protected override void OnImpact (Bullet bullet)
 	{
 		var source = bullet.GetComponentInParent<CharacterBase>();
-		/*if (source is Thug)
+		if (source is Thug)
 		{
 			return; // Immune to other robot damage
-		}*/
+		}
 		currentTarget = source;
+
+		Player.score += Convert.ToInt32(bullet.damage);
+
 		//this.Ensure(currentTarget, "Bullet not shot from a character?");
 	}
 
