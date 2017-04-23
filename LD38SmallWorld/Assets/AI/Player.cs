@@ -18,14 +18,14 @@ public class Player: CharacterBase
 
 		if (Input.GetButtonUp("Fire1"))
 		{
-			Fire();
+			StopFire();
 		}
 	}
 
 	void FixedUpdate()
 	{
 		// http://answers.unity3d.com/questions/13022/aiming-gun-at-cursor.html
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition); //Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+		var ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)); Camera.main.ScreenPointToRay(Input.mousePosition); //
 
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit))
@@ -41,7 +41,7 @@ public class Player: CharacterBase
 		// GAME OVER!!
 		// TODO - Handle death
 
-		this.GetComponent<FirstPersonController>().enabled = false;
+		//this.GetComponent<FirstPersonController>().enabled = false;
 		Log("YOU ARE DEAD! GAME OVER!");
 
 		// Respawn until game over;

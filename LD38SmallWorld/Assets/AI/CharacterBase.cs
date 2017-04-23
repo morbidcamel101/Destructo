@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 using System.Collections.Generic;
 
+
 public abstract class CharacterBase: BehaviorBase
 {	
 	// Fired from Health comp
@@ -47,6 +48,14 @@ public abstract class CharacterBase: BehaviorBase
 		foreach(var hold in holdsters)
 		{
 			hold.gun.Fire();
+		}
+	}
+
+	public void StopFire()
+	{
+		foreach(var hold in holdsters)
+		{
+			hold.gun.StopFire();
 		}
 	}
 

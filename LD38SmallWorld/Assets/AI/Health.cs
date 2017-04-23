@@ -8,7 +8,7 @@ public sealed class Health: BehaviorBase
 {
 	public float totalHealth = 100f;
 	public float currentHealth = 100f;
-	public float regenerationRate = 5f;
+	public float regenerationDuration = 15f; // 5 seconds to regenerate
 	public float criticalPercentage = 0.2f;
 	public float lowPercentage = 0.5f;
 	public bool dead = false;
@@ -47,9 +47,14 @@ public sealed class Health: BehaviorBase
 	{
 		if (currentHealth == totalHealth)
 			yield break;
-        
-		currentHealth += regenerationRate;
-		yield return new WaitForSeconds(regenerationRate);
+
+		var t = 1f/regenerationDuration;
+		currentHealth = Mathf.Clamp(currentHealth + (totalHealth * t), 0f, totalHealth); 
+
+		if (currentHealth == totalHealth)
+			yield break;
+
+		yield return new WaitForSeconds(t);
 	}
 
 	public void Reset() 

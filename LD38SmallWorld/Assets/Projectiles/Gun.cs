@@ -15,9 +15,8 @@ public class Gun : BehaviorBase
 	public float changeTime = 0.5f;
 	public float range = 10000;
 	public Transform gunChamber;
-	public Transform hand;
 
-	private Bullet chamber = null;
+	private Bullet currentBullet = null;
 	private float resumeTime;
 	private Ammo currentAmmo;
 	private bool fire;
@@ -61,8 +60,11 @@ public class Gun : BehaviorBase
 				break;
 			}
 
-			var bulletObj = Spawner.Spawn(currentAmmo.bulletType.prefab, false);
-			chamber = bulletObj.GetComponent<Bullet>();
+			var bulletObj = Spawner.Spawn(currentAmmo.bulletType.prefab, false, gunChamber.position, gunChamber.rotation);
+
+			currentBullet = bulletObj.GetComponent<Bullet>();
+			currentBullet.Shoot(this.GetComponentInParent<CharacterBase>());
+
 			if (anim != null)
 				anim.SetBool("Fire", true);
 			state = State.Loading;
@@ -76,7 +78,7 @@ public class Gun : BehaviorBase
 			break;
 
 			case State.Loaded:
-			if (!chamber)
+			if (!currentBullet)
 				state = State.Ready;
 			else
 				state = State.Fire;
@@ -85,9 +87,8 @@ public class Gun : BehaviorBase
 			case State.Fire:
 				if (anim != null)
 					anim.SetBool("Fire", false);
-				chamber.enabled = true;
-				chamber = null; // Make ready for the next bullet
-				//fire = false;
+				currentBullet.enabled = true;
+				currentBullet = null; // Make ready for the next bullet
 				state = State.Ready;
 			break;
 
@@ -141,7 +142,9 @@ public class Gun : BehaviorBase
 
 		if (target == Vector3.zero)
 			return;
-		hand.LookAt(target);
+
+
+		this.transform.LookAt(target);
 		gunChamber.LookAt(target);
 	}
 
@@ -187,6 +190,11 @@ public class Gun : BehaviorBase
 
 		fire = true;
 		return state != State.Empty;
+	}
+
+	public void StopFire()
+	{
+		fire = false;
 	}
 
 	public void SetTarget(Vector3 target)

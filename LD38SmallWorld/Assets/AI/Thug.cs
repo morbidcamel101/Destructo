@@ -6,6 +6,7 @@ using System;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(MovementMotorBase))]
+[RequireComponent(typeof(Impact))]
 public class Thug : CharacterBase
 {
 	public enum State { Seeking, Attack, Attacking, Attacked, Hide, Hiding }
@@ -24,7 +25,7 @@ public class Thug : CharacterBase
 		// use the strength multiplier
 		Health.totalHealth *= strengthMultiplier;
 		Health.currentHealth *= strengthMultiplier;
-		Health.regenerationRate *= strengthMultiplier; 
+		//Health.regenerationDuration *= strengthMultiplier; 
 		bodyCollider = this.GetComponent<Collider>();
 		if (movement == null)
 			movement = GetComponent<MovementMotorBase>();

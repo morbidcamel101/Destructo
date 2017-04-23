@@ -35,6 +35,8 @@ public class Impact: BehaviorBase
 		if (!(bullet = t.GetComponent<Bullet>()))
 			return;
 
+		bullet.Hit();
+
 		var material = GetComponent<Collider>().sharedMaterial;
 		var impactEffect = MaterialImpactManager.Instance.GetImpactEffect(material);
 

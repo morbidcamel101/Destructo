@@ -21,14 +21,6 @@ public class HealthMeterManager : UIBehavior
         }
     }
 
-    public float regenerationRate
-    {
-        get
-        {
-            return Player.Health.regenerationRate;
-        }
-    }
-
     public float criticalPercentage
     {
         get
