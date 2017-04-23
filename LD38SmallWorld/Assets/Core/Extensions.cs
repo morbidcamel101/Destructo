@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
+using System.Collections.Generic;
+using System;
 
 public static class Extensions 
 {
@@ -17,10 +19,17 @@ public static class Extensions
 
 
 	[Conditional("DEBUG")]
-	public static void Assert(this Object context, bool condition, string message)
+	public static void Assert(this UnityEngine.Object context, bool condition, string message)
 	{
-		if (condition)
-			UnityEngine.Debug.Assert(condition, message, context);
+		UnityEngine.Debug.Assert(condition, message, context);
+	}
+
+	public static void ForEach<T>(this IEnumerable<T> col, Action<T> action)
+	{
+		foreach(var item in col)
+		{
+			action(item);
+		}
 	}
 }
 

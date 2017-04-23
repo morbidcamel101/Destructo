@@ -19,6 +19,7 @@ public class Bullet : BehaviorBase
 	{
 		enabled = false;
 		rigid = GetComponent<Rigidbody>();
+		this.Assert(damage > 0, "Bullet cannot have zero damage");
 	}
 
 

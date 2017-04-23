@@ -233,7 +233,6 @@ public class Spawner : BehaviorBase
 		{
 			position = cache.prototype.transform.position;
 			rotation = cache.prototype.transform.rotation;
-			
 		}
 
 		obj.transform.position = position;
