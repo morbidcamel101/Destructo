@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class ScoreMeterManager : UIBehavior
 {
+    #region Properties
+
     public float score
     {
         get
@@ -18,6 +20,10 @@ public class ScoreMeterManager : UIBehavior
     }
 
     public Text scoreText;
+
+    #endregion
+
+    #region Methods
 
     // Use this for initialization
     void Start ()
@@ -36,4 +42,6 @@ public class ScoreMeterManager : UIBehavior
         if (scoreText != null)
             scoreText.text = string.Format("Score: {0}", Convert.ToInt32(score));
     }
+
+    #endregion
 }

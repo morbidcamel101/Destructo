@@ -3,23 +3,63 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AmmoMeterManager : MonoBehaviour
+public class AmmoMeterManager : UIBehavior
 {
-    public float totalAmmo = 200f;
-    public float currentAmmo = 200f;
+    public Gun gun
+    {
+        get
+        {
+            if (Player != null)
+            {
+                return Player.GetGun("uzi");
+            }
+            else
+                return null;
+        }
+    }
+
+    public float totalAmmo
+    {
+        get
+        {
+            if (Player != null && gun != null)
+            {
+                return gun.clipSize;
+            }
+            else
+                return 0;
+        }
+    }
+
+    public float currentAmmo
+    {
+        get
+        {
+            if (Player != null && gun != null)
+            {
+                return gun.currentClip;
+            }
+            else
+                return 0;
+        }
+    }
+
     public float lowPercentage = 0.5f;
     public float criticalPercentage = 0.2f;
 
     public Image ammoBar;
+    public Text ammoText;
+
+    #region Methods
 
     // Use this for initialization
     void Start()
     {
-        currentAmmo = 200;
+        
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateUI()
     {
         HandleAmmoMeterDisplay();
     }
@@ -32,6 +72,19 @@ public class AmmoMeterManager : MonoBehaviour
         {
             // Display Reload text
         }
+
+        if (gun != null)
+        {
+            if (gun.state == Gun.State.Reloading)
+            {
+                ammoText.text = "Reloading...";
+            }
+            else if (gun.state == Gun.State.Reloaded)
+            {
+                ammoText.text = "";
+                ammoBar.fillAmount = 1;
+            }
+        }
     }
 
     private float AmmoFillAmount(float ammoVal, float inMinAmmoVal, float inMaxAmmoVal, float outMinFillVal, float outMaxFillVal)
@@ -41,16 +94,24 @@ public class AmmoMeterManager : MonoBehaviour
 
     public void AmmoIncrease()
     {
-        // Test relaod back to full capacity
-        currentAmmo = totalAmmo;
+        if (gun != null)
+        {
+            // Test relaod back to full capacity
+            gun.currentClip = (int)totalAmmo;
+        }
     }
 
     public void AmmoDecrease()
     {
-        // Test
-        currentAmmo = currentAmmo - 2;
+        if (gun != null)
+        {
+            // Test
+            gun.currentClip = gun.currentClip - 2;
 
-        if (currentAmmo < 0)
-            currentAmmo = 0;
+            if (gun.currentClip < 0)
+                gun.currentClip = 0;
+        }
     }
+
+    #endregion
 }

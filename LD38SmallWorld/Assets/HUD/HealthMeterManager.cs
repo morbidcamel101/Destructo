@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class HealthMeterManager : UIBehavior
 {
+    #region Properties
+
     public float totalHealth
     {
         get
@@ -76,8 +78,12 @@ public class HealthMeterManager : UIBehavior
 
     private bool showBloodOverlay = false;
 
-	// Use this for initialization
-	void Start ()
+    #endregion
+
+    #region Methods
+
+    // Use this for initialization
+    void Start ()
     {
         if (Player != null)
         {
@@ -176,4 +182,6 @@ public class HealthMeterManager : UIBehavior
                 Player.Health.currentHealth = 0;
         }
     }
+
+    #endregion
 }
