@@ -71,13 +71,14 @@ public class AmmoMeterManager : UIBehavior
         if (ammoBar.fillAmount <= criticalPercentage)
         {
             // Display Reload text
+            ammoText.text = "RELOAD!";
         }
 
         if (gun != null)
         {
             if (gun.state == Gun.State.Reloading)
             {
-                ammoText.text = "Reloading...";
+                ammoText.text = "RELOADING...";
             }
             else if (gun.state == Gun.State.Reloaded)
             {
