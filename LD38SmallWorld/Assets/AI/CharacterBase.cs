@@ -35,7 +35,7 @@ public abstract class CharacterBase: BehaviorBase
 		return holdster.gun;
 	}
 
-	public void SetTarget(Vector3 target)
+	public virtual void SetTarget(Vector3 target)
 	{
 		foreach(var hold in holdsters)
 		{
@@ -73,6 +73,12 @@ public abstract class CharacterBase: BehaviorBase
 	}
 
 	public Health Health { get { return this.GetComponent<Health>(); } }
+
+	protected virtual void OnFire(Bullet bullet)
+	{
+		// Bullet is send!!
+		bullet.sender = this; // From Russia with love :)
+	}
 
 	
 

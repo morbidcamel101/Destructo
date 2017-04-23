@@ -68,9 +68,9 @@ public class Thug : CharacterBase
 				if (!currentTarget)
 				{
 					state = State.Attacked;
+					break;
 				}
 				FireAt(currentTarget.transform);
-
 				
 				if (!LockOn())
 				{

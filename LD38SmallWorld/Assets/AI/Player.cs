@@ -8,6 +8,9 @@ public class Player: CharacterBase
 {
 
 	public int score = 0;
+	internal HitInfo aim = new HitInfo();
+
+
 
 	void Update()
 	{
@@ -25,13 +28,20 @@ public class Player: CharacterBase
 	void FixedUpdate()
 	{
 		// http://answers.unity3d.com/questions/13022/aiming-gun-at-cursor.html
-		var ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)); Camera.main.ScreenPointToRay(Input.mousePosition); //
+		var ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)); // Camera.main.ScreenPointToRay(Input.mousePosition); 
 
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit))
-			SetTarget(hit.point);
+
+
+		if (Physics.Raycast(ray, out aim.hit))
+			SetTarget(aim.hit.point);
 		else
-			SetTarget(ray.GetPoint(100));
+			SetTarget(ray.GetPoint(10000));
+	}
+
+	public override void SetTarget (Vector3 target)
+	{
+		base.SetTarget (target);
+		aim.target = target;
 	}
 
 

@@ -33,7 +33,8 @@ public class Bullet : BehaviorBase
 
 
 	void OnDisable() {
-		rigid.isKinematic = true;
+		if (rigid)
+			rigid.isKinematic = true;
 	}
 
 	// Update is called once per frame
@@ -57,14 +58,15 @@ public class Bullet : BehaviorBase
 		enabled = true;
 		trans = transform;
 		spawnTime = Time.time;
-		if (mode == Mode.RigidBody)
+
+		if (mode == Mode.RigidBody && rigid)
 		{
 			rigid.isKinematic = false;
 			rigid.AddForce(trans.forward * speed * rigid.mass, ForceMode.Impulse);
 		}
 		else 
 		{
-			mode = Mode.Simple;
+			
 		}
 		Spawner.Recycle(gameObject, lifeTime);
 
@@ -78,7 +80,8 @@ public class Bullet : BehaviorBase
 	public void Recycle()
 	{
 		enabled = false;
-		rigid.isKinematic = true;
+		if (rigid)
+			rigid.isKinematic = true;
 		Spawner.Recycle(gameObject);
 	}
 }

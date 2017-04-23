@@ -111,6 +111,11 @@ public sealed class CharacterManager : BehaviorBase
 
 	public void Respawn()
 	{
+		if (population == 0)
+		{
+			Log("WAVE Completed!");
+			return;
+		}
 		var spawnPoint = GetNextSpawnPoint();
 		if (spawnPoint == null)
 			return;
@@ -124,6 +129,8 @@ public sealed class CharacterManager : BehaviorBase
 			spawn.Randomize();
 			spawned.Add(obj);
 		}
+
+		this.population--;
 	}
 
 	public void Dead(GameObject obj)

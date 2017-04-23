@@ -52,86 +52,87 @@ public class Gun : BehaviorBase
 			break;
 
 			case State.Load:
-			resumeTime = Time.time + fireRate;
+				resumeTime = Time.time + fireRate;
 
-			if (--currentClip < 0)
-			{
-				state = State.Reload;
-				break;
-			}
+				if (--currentClip < 0)
+				{
+					state = State.Reload;
+					break;
+				}
 
-			var bulletObj = Spawner.Spawn(currentAmmo.bulletType.prefab, false, gunChamber.position, gunChamber.rotation);
+				var bulletObj = Spawner.Spawn(currentAmmo.bulletType.prefab, false, gunChamber.position, gunChamber.rotation);
 
-			currentBullet = bulletObj.GetComponent<Bullet>();
-			currentBullet.Shoot(this.GetComponentInParent<CharacterBase>());
+				currentBullet = bulletObj.GetComponent<Bullet>();
+				currentBullet.Shoot(this.GetComponentInParent<CharacterBase>());
 
-			if (anim != null)
-				anim.SetBool("Fire", true);
-			state = State.Loading;
+				if (anim != null)
+					anim.SetBool("Fire", true);
+				state = State.Loading;
 			break;
 
 			case State.Loading:
-			if (Time.time < resumeTime)
-				return;
+				if (Time.time < resumeTime)
+					return;
 
-			state = State.Loaded;
+				state = State.Loaded;
 			break;
 
 			case State.Loaded:
-			if (!currentBullet)
-				state = State.Ready;
-			else
-				state = State.Fire;
+				if (!currentBullet)
+					state = State.Ready;
+				else
+					state = State.Fire;
 			break; 
 
 			case State.Fire:
 				if (anim != null)
 					anim.SetBool("Fire", false);
-				currentBullet.enabled = true;
+
+				SendMessageUpwards("OnFire", currentBullet, SendMessageOptions.RequireReceiver);
 				currentBullet = null; // Make ready for the next bullet
 				state = State.Ready;
 			break;
 
 			case State.Reload:
-			resumeTime = Time.time + reloadTime;
+				resumeTime = Time.time + reloadTime;
 
-			if (anim != null)
-			{
-				anim.SetBool("Reload", true);
-				anim.SetFloat("ReloadSpeed", (2f/reloadTime));
-			}
+				if (anim != null)
+				{
+					anim.SetBool("Reload", true);
+					anim.SetFloat("ReloadSpeed", (2f/reloadTime));
+				}
 
-			state = State.Reloading;			
+				state = State.Reloading;			
 			break;
 
 			case State.Reloading:
-			if (Time.time < resumeTime)
-				break;
+				if (Time.time < resumeTime)
+					break;
 
-			state = State.Reloaded;
+				state = State.Reloaded;
 			break;
 
 			case State.Reloaded:
-			currentClip = clipSize;
-			currentAmmo.clips--;
+				currentClip = clipSize;
+				currentAmmo.clips--;
 
-			if (currentAmmo.clips <= 0)
-			{
-				state = State.Empty;
-				break;
-			}
+				if (currentAmmo.clips <= 0)
+				{
+					state = State.Empty;
+					break;
+				}
 
-			if (anim != null)
-				anim.SetBool("Reload", false);
-			// Todo - cleanup animation and sound 
-			state = State.Ready;
+				if (anim != null)
+					anim.SetBool("Reload", false);
+				// Todo - cleanup animation and sound 
+				state = State.Ready;
 			break;
 
 			case State.Empty:
-			if (currentAmmo.clips > 0)
-			{
-				state = State.Reload;
-			}
+				if (currentAmmo.clips > 0)
+				{
+					state = State.Reload;
+				}
 			break;
 		}
 	}

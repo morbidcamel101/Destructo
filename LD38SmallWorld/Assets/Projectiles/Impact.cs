@@ -8,14 +8,11 @@ public class Impact: BehaviorBase
 	public float duration = 3;
 
 
-	void OnTriggerEnter(Collider other) {
+	private PhysicMaterial material;
 
-		Log("Impact -> "+other.gameObject.ToString());
-		var bullet = other.GetComponent<Bullet>();
-		if (bullet == null)
-			return;
-
-		bullet.enabled = false;
+	void Awake()
+	{
+		material = GetComponent<Collider> ().sharedMaterial;
 	}
 
 	private void SpawnEffect ( MaterialImpactManager.ImpactEffect effect, Vector3 position, Quaternion rotation)
@@ -28,29 +25,35 @@ public class Impact: BehaviorBase
 		Spawner.Recycle (instance, duration);
 	}
 
+	private void BulletImpact (Vector3 point, Vector3 normal, Bullet bullet)
+	{
+		var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
+		SpawnEffect (impactEffect, point, Quaternion.Euler(normal));
+		Debug.DrawRay (point, normal, Color.red);
+		// TODO Kick off audio
+		// NOTE: The bullet get send with the message - what's the last thing that goes through a characters head? -- BULLET!!
+		SendMessage ("OnImpact", bullet, SendMessageOptions.DontRequireReceiver);
+		bullet.Hit ();
+	}
+
+
 	void OnCollisionEnter(Collision collision)
 	{
 		var t = collision.transform;
 		Bullet bullet;
-		if (!(bullet = t.GetComponent<Bullet>()))
+		if (!(bullet = t.GetComponent<Bullet>()) || !bullet.enabled)
 			return;
 
-		bullet.Hit();
+		BulletImpact (collision.contacts[0].point, collision.contacts[1].normal, bullet);
+	}
 
-		var material = GetComponent<Collider>().sharedMaterial;
-		var impactEffect = MaterialImpactManager.Instance.GetImpactEffect(material);
+	void OnTriggerEnter(Collider other)
+	{
+		var bullet = other.GetComponent<Bullet>();
+		if (!bullet || !bullet.enabled)
+			return;
 
-		foreach(var contact in collision.contacts)
-		{
-			Debug.DrawRay(contact.point, contact.normal, Color.red);
-
-			if (impactEffect != null)
-				SpawnEffect (impactEffect, contact.point, Quaternion.Euler(-contact.normal));
-		}
-
-		// TODO Kick off audio
-		// NOTE: The bullet get send with the message - what's the last thing that goes through a characters head? -- BULLET!!
-		SendMessage("OnImpact", bullet, SendMessageOptions.DontRequireReceiver);
+		BulletImpact(bullet.transform.position, -bullet.transform.forward, bullet);
 	}
 }
 
