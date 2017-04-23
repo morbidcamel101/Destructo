@@ -51,5 +51,11 @@ public sealed class Health: BehaviorBase
 		currentHealth += regenerationRate;
 		yield return new WaitForSeconds(regenerationRate);
 	}
+
+	public void Reset() 
+	{
+		currentHealth = totalHealth;
+		dead = false;
+	}
 }
 
