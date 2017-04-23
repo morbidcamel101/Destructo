@@ -40,7 +40,7 @@ public class ScoreMeterManager : UIBehavior
     private void SetScoreText()
     {
         if (scoreText != null)
-            scoreText.text = string.Format("Score: {0}", Convert.ToInt32(score));
+            scoreText.text = string.Format("SCORE: {0}", Convert.ToInt32(score));
     }
 
     #endregion
