@@ -1,11 +1,11 @@
-﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
+﻿<Properties StartupItem="LD38SmallWorld.Plugins.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AI/Thug.cs">
     <Files>
-      <File FileName="Assets/Movement/NavMeshMovement.cs" Line="28" Column="46" />
+      <File FileName="Assets/Movement/NavMeshMovement.cs" Line="1" Column="1" />
       <File FileName="Assets/AI/Player.cs" Line="1" Column="1" />
-      <File FileName="Assets/AI/Thug.cs" Line="47" Column="5" />
-      <File FileName="Assets/AI/CharacterBase.cs" Line="37" Column="69" />
+      <File FileName="Assets/AI/Thug.cs" Line="72" Column="3" />
+      <File FileName="Assets/AI/CharacterBase.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
