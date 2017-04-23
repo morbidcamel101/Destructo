@@ -50,6 +50,7 @@
      <Compile Include="Assets\AI\Health.cs" />
      <Compile Include="Assets\AI\Player.cs" />
      <Compile Include="Assets\AI\Thug.cs" />
+     <Compile Include="Assets\AI\ViewModels.cs" />
      <Compile Include="Assets\AmmoMeterManager.cs" />
      <Compile Include="Assets\ButtonManager.cs" />
      <Compile Include="Assets\Core\BehaviorBase.cs" />

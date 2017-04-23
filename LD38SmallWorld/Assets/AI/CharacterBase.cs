@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 using System.Collections.Generic;
 
+
 public abstract class CharacterBase: BehaviorBase
 {	
 	// Fired from Health comp
@@ -34,7 +35,7 @@ public abstract class CharacterBase: BehaviorBase
 		return holdster.gun;
 	}
 
-	public void SetTarget(Vector3 target)
+	public virtual void SetTarget(Vector3 target)
 	{
 		foreach(var hold in holdsters)
 		{
@@ -47,6 +48,14 @@ public abstract class CharacterBase: BehaviorBase
 		foreach(var hold in holdsters)
 		{
 			hold.gun.Fire();
+		}
+	}
+
+	public void StopFire()
+	{
+		foreach(var hold in holdsters)
+		{
+			hold.gun.StopFire();
 		}
 	}
 
@@ -64,6 +73,12 @@ public abstract class CharacterBase: BehaviorBase
 	}
 
 	public Health Health { get { return this.GetComponent<Health>(); } }
+
+	protected virtual void OnFire(Bullet bullet)
+	{
+		// Bullet is send!!
+		bullet.sender = this; // From Russia with love :)
+	}
 
 	
 

@@ -23,9 +23,9 @@ public class Spawner : BehaviorBase
 
 	[Serializable]
 	public class ObjectCache {
-		
+
+		public bool disabled = false;
 		public GameObject prefab;
-		public GameObject prototype;
 		public int cacheSize = 10;
 		public int cacheIndex = 0;
 		[HideInInspector]
@@ -136,12 +136,6 @@ public class Spawner : BehaviorBase
 		CheckValid();
 		cache.CheckValid();
 
-		if (cache.prototype)
-		{
-			obj.transform.SetParent(cache.prototype.transform);
-			return;
-		}
-
 		// Make a transform under the cache root (Recycle Bin)
 		var dest = cacheRoot.transform.FindChild(cache.prefab.name);
 		if (dest == null)
@@ -158,7 +152,7 @@ public class Spawner : BehaviorBase
 	{
 		for(int i = 0; i < caches.Length; i++)
 		{
-			if (caches[i].prefab == prefab)
+			if (caches[i].prefab == prefab && !caches[i].disabled)
 				return caches[i];
 		}
 		return null;
@@ -180,31 +174,27 @@ public class Spawner : BehaviorBase
 		if (!spawner.cacheRoot || !cache.prefab)
 			throw new InvalidProgramException("Cache root or cache prefab is not configured");
 		var res = MonoBehaviour.Instantiate (cache.prefab);
-		if (cache.prototype != null)
-		{
-			res.transform.Align(cache.prototype);
-			res.transform.SetParent(cache.prototype.transform, false);
-		}
-		else
-		{	
-			res.transform.SetParent(spawner.cacheRoot.transform);
-		}
+		res.transform.SetParent(spawner.cacheRoot.transform);
 		spawner.Organize (res, cache);
 		return res;
 	}
 
-	private static GameObject CreateObject (GameObject prefab)
+	private static GameObject CreateObject (GameObject prefab, Vector3 position, Quaternion rotation)
 	{
 		
-		return MonoBehaviour.Instantiate(prefab, spawner.cacheRoot.transform);
+		var obj =  MonoBehaviour.Instantiate(prefab, spawner.cacheRoot.transform) as GameObject;
+
+		obj.transform.position = position;
+		obj.transform.rotation = rotation;
+		return obj;
 	}
 
-	public static GameObject Spawn(Prototype prototype, bool cacheOnly = false, Vector3 position = default(Vector3), Quaternion rotation = default(Quaternion))
+	public static GameObject Spawn(Prototype prototype, bool cacheOnly, Vector3 position, Quaternion rotation)
 	{
 		return Spawn(prototype.prefab, cacheOnly, position, rotation);
 	}
 
-	public static GameObject Spawn(GameObject prefab, bool cacheOnly = false, Vector3 position = default(Vector3), Quaternion rotation = default(Quaternion))
+	public static GameObject Spawn(GameObject prefab, bool cacheOnly, Vector3 position, Quaternion rotation)
 	{
 		if (spawner == null)
 		{
@@ -216,8 +206,11 @@ public class Spawner : BehaviorBase
 
 		var cache = spawner.GetCacheForPrefab(prefab);
 		if (cache == null) 
-			return CreateObject (prefab);
-		
+		{
+			
+			return CreateObject (prefab, position, rotation);
+		}
+
 		// Get available  object in the cache
 		var obj = cache.Next();
 		if (cacheOnly && obj == null)
@@ -227,12 +220,6 @@ public class Spawner : BehaviorBase
 		{
 			spawner.Log("Cache unavailable for {0} -- increase cache size??", prefab);
 			return CreateObject(cache); // Cache Leak??
-		}
-
-		if (cache.prototype != null && position == Vector3.zero)
-		{
-			position = cache.prototype.transform.position;
-			rotation = cache.prototype.transform.rotation;
 		}
 
 		obj.transform.position = position;
@@ -276,7 +263,7 @@ public class Spawner : BehaviorBase
 		else
 		{
 			if (delay <= 0f)
-				GameObject.DestroyImmediate(destroy);
+				GameObject.Destroy(destroy);
 			else
 				GameObject.Destroy(destroy, delay);
 		}

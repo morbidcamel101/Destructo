@@ -6,6 +6,7 @@ using System;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(MovementMotorBase))]
+[RequireComponent(typeof(Impact))]
 public class Thug : CharacterBase
 {
 	public enum State { Seeking, Attack, Attacking, Attacked, Hide, Hiding }
@@ -24,7 +25,7 @@ public class Thug : CharacterBase
 		// use the strength multiplier
 		Health.totalHealth *= strengthMultiplier;
 		Health.currentHealth *= strengthMultiplier;
-		Health.regenerationRate *= strengthMultiplier; 
+		//Health.regenerationDuration *= strengthMultiplier; 
 		bodyCollider = this.GetComponent<Collider>();
 		if (movement == null)
 			movement = GetComponent<MovementMotorBase>();
@@ -67,9 +68,9 @@ public class Thug : CharacterBase
 				if (!currentTarget)
 				{
 					state = State.Attacked;
+					break;
 				}
 				FireAt(currentTarget.transform);
-
 				
 				if (!LockOn())
 				{
@@ -123,12 +124,11 @@ public class Thug : CharacterBase
 
 	protected override void OnImpact (Bullet bullet)
 	{
-		var source = bullet.GetComponentInParent<CharacterBase>();
-		if (source is Thug)
+		if (bullet.sender is Thug)
 		{
 			return; // Immune to other robot damage
 		}
-		currentTarget = source;
+		currentTarget = bullet.sender;
 
 		Player.score += Convert.ToInt32(bullet.damage);
 

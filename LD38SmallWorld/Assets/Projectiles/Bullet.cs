@@ -11,9 +11,12 @@ public class Bullet : BehaviorBase
 	public float distance = 10000;
 	public float damage = 10f;
 
+	public CharacterBase sender;
+
 	private Transform trans;
 	private float spawnTime;
 	private Rigidbody rigid;
+
 
 	void Awake()
 	{
@@ -23,50 +26,41 @@ public class Bullet : BehaviorBase
 	}
 
 
-	// Use this for initialization
-	void OnEnable ()
-	{
-		trans = transform;
-		spawnTime = Time.time;
-		rigid.isKinematic = false;
-		rigid.AddForce(trans.forward * speed * rigid.mass, ForceMode.Impulse);
-	}
-
-	void OnDisable() {
-		rigid.isKinematic = true;
-	}
-
 	// Update is called once per frame
 	void Update ()
 	{
-		trans.position += trans.forward * speed * Time.deltaTime;
+		
+		var delta = trans.forward * speed * Time.deltaTime;
+		trans.position += delta;
 		distance -= speed * Time.deltaTime;
 
-		if ((Time.time > spawnTime + lifeTime || distance < 0) && Expired())
+		if (Time.time > spawnTime + lifeTime)
 		{
-			Expired();
-			Spawner.Recycle(gameObject);
+			Recycle();
 		}
-		// Todo -- Hit
-	
 	}
 
-	public virtual void Shoot()
+	public virtual void Shoot(CharacterBase sender)
 	{
+		this.sender = sender;
 		enabled = true;
+		trans = transform;
+		spawnTime = Time.time;
+		Spawner.Recycle(gameObject, lifeTime);
+
 	}
 
 	public virtual void Hit() 
 	{
-		enabled = false;
-		throw new NotImplementedException();
+		Recycle();
 	}
 
-	public virtual bool Expired()
+	public void Recycle()
 	{
-		
 		enabled = false;
-		return true; // Yes - We expired
+		if (rigid)
+			rigid.isKinematic = true;
+		Spawner.Recycle(gameObject);
 	}
 }
 
