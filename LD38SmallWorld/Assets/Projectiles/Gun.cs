@@ -31,7 +31,7 @@ public class Gun : BehaviorBase
 		this.Assert(ammo.Length > 0, "No ammo assigned!");
 		currentAmmo = ammo[0];
 		Ensure(currentAmmo.bulletType, "Invalid Ammo Assigned!");
-		anim = GetComponent<Animator>();
+		anim = GetComponentInChildren<Animator>();
 	}
 	
 	// Update is called once per frame
