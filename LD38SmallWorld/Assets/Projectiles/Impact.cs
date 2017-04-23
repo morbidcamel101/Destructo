@@ -27,13 +27,16 @@ public class Impact: BehaviorBase
 
 	private void BulletImpact (Vector3 point, Vector3 normal, Bullet bullet)
 	{
-		var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
-		SpawnEffect (impactEffect, point, Quaternion.Euler(normal));
-		Debug.DrawRay (point, normal, Color.red);
 		// TODO Kick off audio
 		// NOTE: The bullet get send with the message - what's the last thing that goes through a characters head? -- BULLET!!
-		SendMessage ("OnImpact", bullet, SendMessageOptions.DontRequireReceiver);
-		bullet.Hit ();
+		SendMessage ("OnImpact", bullet, SendMessageOptions.DontRequireReceiver); // Reciever should call bullet.Hit ()!!
+		if (!bullet.enabled)
+		{
+			// bullet was used
+			var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
+			SpawnEffect (impactEffect, point, Quaternion.Euler(normal));
+		}
+
 	}
 
 
@@ -44,7 +47,7 @@ public class Impact: BehaviorBase
 		if (!(bullet = t.GetComponent<Bullet>()) || !bullet.enabled)
 			return;
 
-		BulletImpact (collision.contacts[0].point, collision.contacts[1].normal, bullet);
+		BulletImpact (collision.contacts[0].point, collision.contacts[0].normal, bullet);
 	}
 
 	void OnTriggerEnter(Collider other)

@@ -6,12 +6,6 @@ using System;
 [AddComponentMenu("Small World/Bullet")]
 public class Bullet : BehaviorBase
 {
-	public enum Mode {
-		RigidBody,
-		Simple
-	}
-
-	public Mode mode = Mode.RigidBody;
 	public float speed = 10;
 	public float lifeTime = 0.5f;
 	public float distance = 10000;
@@ -32,19 +26,13 @@ public class Bullet : BehaviorBase
 	}
 
 
-	void OnDisable() {
-		if (rigid)
-			rigid.isKinematic = true;
-	}
-
 	// Update is called once per frame
 	void Update ()
 	{
-		if (mode == Mode.Simple)
-		{
-			trans.position += trans.forward * speed * Time.deltaTime;
-			distance -= speed * Time.deltaTime;
-		}
+		
+		var delta = trans.forward * speed * Time.deltaTime;
+		trans.position += delta;
+		distance -= speed * Time.deltaTime;
 
 		if (Time.time > spawnTime + lifeTime)
 		{
@@ -58,16 +46,6 @@ public class Bullet : BehaviorBase
 		enabled = true;
 		trans = transform;
 		spawnTime = Time.time;
-
-		if (mode == Mode.RigidBody && rigid)
-		{
-			rigid.isKinematic = false;
-			rigid.AddForce(trans.forward * speed * rigid.mass, ForceMode.Impulse);
-		}
-		else 
-		{
-			
-		}
 		Spawner.Recycle(gameObject, lifeTime);
 
 	}
