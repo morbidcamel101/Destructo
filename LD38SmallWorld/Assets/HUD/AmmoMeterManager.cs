@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +10,7 @@ public class AmmoMeterManager : MonoBehaviour
     public float lowPercentage = 0.5f;
     public float criticalPercentage = 0.2f;
 
-    public Image content;
+    public Image ammoBar;
 
     // Use this for initialization
     void Start()
@@ -27,9 +26,9 @@ public class AmmoMeterManager : MonoBehaviour
 
     private void HandleAmmoMeterDisplay()
     {
-        content.fillAmount = AmmoFillAmount(currentAmmo, 0, totalAmmo, 0, 1);
+        ammoBar.fillAmount = AmmoFillAmount(currentAmmo, 0, totalAmmo, 0, 1);
 
-        if (content.fillAmount <= criticalPercentage)
+        if (ammoBar.fillAmount <= criticalPercentage)
         {
             // Display Reload text
         }
