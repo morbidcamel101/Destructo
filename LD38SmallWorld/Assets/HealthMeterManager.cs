@@ -62,7 +62,7 @@ public class HealthMeterManager : UIBehavior
 	void Start ()
     {
         Player.Health.currentHealth = 100f;
-        StartCoroutine(HandleRegenerationFactor());
+        //StartCoroutine(HandleRegenerationFactor());
     }
 	
 	// Update is called once per frame
