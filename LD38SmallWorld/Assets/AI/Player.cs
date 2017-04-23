@@ -42,6 +42,10 @@ public class Player: CharacterBase
 		this.GetComponent<FirstPersonController>().enabled = false;
 		Log("YOU ARE DEAD! GAME OVER!");
 
+		// Respawn until game over;
+
+
+		
 		throw new NotImplementedException();
 
 	}
