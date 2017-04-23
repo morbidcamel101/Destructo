@@ -10,6 +10,7 @@ public class Bullet : BehaviorBase
 	public float lifeTime = 0.5f;
 	public float distance = 10000;
 	public float damage = 10f;
+	internal bool didHit = false;
 
 	public CharacterBase sender;
 
@@ -43,6 +44,7 @@ public class Bullet : BehaviorBase
 	public virtual void Shoot(CharacterBase sender)
 	{
 		this.sender = sender;
+		didHit = false;
 		enabled = true;
 		trans = transform;
 		spawnTime = Time.time;
@@ -52,6 +54,7 @@ public class Bullet : BehaviorBase
 
 	public virtual void Hit() 
 	{
+		didHit = true;
 		Recycle();
 	}
 

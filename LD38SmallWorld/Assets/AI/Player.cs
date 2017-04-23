@@ -6,7 +6,6 @@ using UnityStandardAssets.Characters.FirstPerson;
 [RequireComponent(typeof(Health))]
 public class Player: CharacterBase
 {
-
 	public int score = 0;
 	internal HitInfo aim = new HitInfo();
 
@@ -76,8 +75,16 @@ public class Player: CharacterBase
 
 	protected override void OnImpact (Bullet bullet)
 	{
-		// Ouch
+		bullet.Hit(); // Yes ouch
+
 	}
+
+	protected override void CanImpact (Bullet bullet)
+	{
+		if (bullet.sender is Thug)
+			bullet.Hit();
+	}
+
 }
 
 

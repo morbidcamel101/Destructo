@@ -14,6 +14,8 @@ public abstract class CharacterBase: BehaviorBase
 	// Fired from Impact comp
 	protected abstract void OnImpact(Bullet bullet);
 
+	protected abstract void CanImpact(Bullet bullet);
+
 	// Fired from Health comp
 	protected abstract void OnCriticalHealth();
 

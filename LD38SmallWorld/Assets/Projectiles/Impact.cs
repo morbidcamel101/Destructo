@@ -29,14 +29,19 @@ public class Impact: BehaviorBase
 	{
 		// TODO Kick off audio
 		// NOTE: The bullet get send with the message - what's the last thing that goes through a characters head? -- BULLET!!
-		SendMessage ("OnImpact", bullet, SendMessageOptions.DontRequireReceiver); // Reciever should call bullet.Hit ()!!
-		if (!bullet.enabled)
-		{
-			// bullet was used
-			var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
-			SpawnEffect (impactEffect, point, Quaternion.Euler(normal));
-		}
 
+		SendMessage("CanImpact", bullet, SendMessageOptions.DontRequireReceiver);
+
+		if (bullet.didHit)
+		{
+			SendMessage ("OnImpact", bullet, SendMessageOptions.DontRequireReceiver); // Reciever should call bullet.Hit ()!!
+			if (bullet.didHit)
+			{
+				// bullet was used
+				var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
+				SpawnEffect (impactEffect, point, Quaternion.Euler(normal));
+			}
+		}
 	}
 
 

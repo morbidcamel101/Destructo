@@ -122,17 +122,18 @@ public class Thug : CharacterBase
 
 	}
 
+	protected override void CanImpact (Bullet bullet)
+	{
+		if (bullet.sender is Player)
+			bullet.Hit();
+	}
+
 	protected override void OnImpact (Bullet bullet)
 	{
-		if (bullet.sender is Thug)
-		{
-			return; // Immune to other robot damage
-		}
 		currentTarget = bullet.sender;
-
 		Player.score += Convert.ToInt32(bullet.damage);
 
-		//this.Ensure(currentTarget, "Bullet not shot from a character?");
+		GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.damage, ForceMode.Impulse);
 	}
 
 	public override void Randomize ()
