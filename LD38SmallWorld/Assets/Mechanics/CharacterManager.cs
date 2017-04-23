@@ -77,7 +77,9 @@ public sealed class CharacterManager : BehaviorBase
 	private static void CheckValid()
 	{
 		if (_instance == null)
-					throw new InvalidOperationException("Character Manager not initialized!");
+		{
+			Debug.LogError("Character Manager not initialized!");
+		}
 	}
 
 	public CharacterDefinition GetCharacter(string id)
@@ -94,11 +96,14 @@ public sealed class CharacterManager : BehaviorBase
 
 	private SpawnPoint GetNextSpawnPoint()
 	{
-		// TODO  - RANDOMIZE
-		foreach(var spawnPoint in spawnPoints)
+		var list = new List<SpawnPoint>(this.spawnPoints);
+		list.Sort((x,y) => Random.value.CompareTo(Random.value));
+
+		foreach(var spawnPoint in list)
 		{
 			if (!spawnPoint.IsReady)
 				continue;
+
 			return spawnPoint;
 		}
 		return null;
