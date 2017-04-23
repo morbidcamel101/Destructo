@@ -15,6 +15,16 @@ public class ButtonManager : MonoBehaviour
         SceneManager.LoadScene(loadGameLevel);
     }
 
+    public void RetryGameButton(string loadGameLevel)
+    {
+        SceneManager.LoadScene(loadGameLevel);
+    }
+
+    public void MainMenuButton()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void ExitGameButton()
     {
         Application.Quit();
@@ -23,6 +33,7 @@ public class ButtonManager : MonoBehaviour
     public void CreditsButton(string loadGameLevel)
     {
         // Dev Team Credits Page
+        SceneManager.LoadScene("Credits");
     }
 
 }
