@@ -94,8 +94,11 @@ public class Gun : BehaviorBase
 			case State.Reload:
 			resumeTime = Time.time + reloadTime;
 
-			anim.SetBool("Reload", true);
-			anim.SetFloat("ReloadSpeed", (2f/reloadTime));
+			if (anim != null)
+			{
+				anim.SetBool("Reload", true);
+				anim.SetFloat("ReloadSpeed", (2f/reloadTime));
+			}
 
 			state = State.Reloading;			
 			break;

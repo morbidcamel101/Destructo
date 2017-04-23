@@ -128,7 +128,7 @@ public sealed class CharacterManager : BehaviorBase
 
 	public void Dead(GameObject obj)
 	{
-		Spawner.Recycle(gameObject, 5f);
+		Spawner.Recycle(obj, 5f);
 		this.spawned.Remove(obj);
 	}
 
