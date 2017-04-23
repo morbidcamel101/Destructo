@@ -27,12 +27,12 @@ public class HealthMeterManager : UIBehavior
         }
     }
 
-    public float regenerationRate
+    public float regenerationDuration
     {
         get
         {
             if (Player != null)
-                return Player.Health.regenerationRate;
+                return Player.Health.regenerationDuration;
             else
                 return 0;
         }
