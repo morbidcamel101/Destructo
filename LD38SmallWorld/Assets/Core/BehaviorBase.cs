@@ -17,5 +17,15 @@ public abstract class BehaviorBase: MonoBehaviour
 		Debug.Log(message, this);
 
 	}
+
+    public Player Player
+    {
+        get
+        {
+            var obj = GameObject.FindGameObjectWithTag("Player");
+
+            return obj != null ? obj.GetComponent<Player>() : default(Player);
+        }
+    }
 }
 

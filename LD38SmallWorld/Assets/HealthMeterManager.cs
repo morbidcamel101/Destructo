@@ -3,14 +3,55 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthMeterManager : MonoBehaviour
+public class HealthMeterManager : UIBehavior
 {
-    public float totalHealth = 100f;
-    public float currentHealth = 100f;
-    public float regenerationRate = 5f;
-    public float criticalPercentage = 0.2f;
-    public float lowPercentage = 0.5f;
-    public bool dead = false;
+    public float totalHealth
+    {
+        get
+        {
+            return Player.Health.totalHealth;
+        }
+    }
+
+    public float currentHealth
+    {
+        get
+        {
+            return Player.Health.currentHealth;
+        }
+    }
+
+    public float regenerationRate
+    {
+        get
+        {
+            return Player.Health.regenerationRate;
+        }
+    }
+
+    public float criticalPercentage
+    {
+        get
+        {
+            return Player.Health.criticalPercentage;
+        }
+    }
+
+    public float lowPercentage
+    {
+        get
+        {
+            return Player.Health.lowPercentage;
+        }
+    }
+
+    public bool dead
+    {
+        get
+        {
+            return Player.Health.dead;
+        }
+    }
 
     public Image content;
     public GameObject[] bloodOverlayObjects;
@@ -20,12 +61,12 @@ public class HealthMeterManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        currentHealth = 100f;
+        Player.Health.currentHealth = 100f;
         StartCoroutine(HandleRegenerationFactor());
     }
 	
 	// Update is called once per frame
-	void Update ()
+	protected override void UpdateUI ()
     {
         HandleHealthMeterDisplay();
     }
@@ -69,7 +110,7 @@ public class HealthMeterManager : MonoBehaviour
             if (currentHealth < totalHealth)
             {
                 // If health < total max...
-                currentHealth += 1; 
+                Player.Health.currentHealth += 1; 
                 
                 // Increase health and wait the specified time
                 yield return new WaitForSeconds(1);
@@ -90,18 +131,18 @@ public class HealthMeterManager : MonoBehaviour
     public void HealthIncrease()
     {
         // Test
-        currentHealth = currentHealth + 5;
+        Player.Health.currentHealth = Player.Health.currentHealth + 5;
 
         if (currentHealth > totalHealth)
-            currentHealth = totalHealth;
+            Player.Health.currentHealth = totalHealth;
     }
 
     public void HealthDecrease()
     {
         // Test
-        currentHealth = currentHealth - 5;
+        Player.Health.currentHealth = Player.Health.currentHealth - 5;
 
         if (currentHealth < 0)
-            currentHealth = 0;
+            Player.Health.currentHealth = 0;
     }
 }
