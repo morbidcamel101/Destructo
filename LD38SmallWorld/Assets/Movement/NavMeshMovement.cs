@@ -18,7 +18,10 @@ public sealed class NavMeshMovement: MovementMotorBase
 
 	void FixedUpdate()
 	{
-		this.transform.position =  Vector3.Slerp(transform.position, agent.nextPosition, Time.deltaTime);
+		if (Target == null)
+			return;
+
+		this.transform.position =  Vector3.Slerp(this.transform.position, this.transform.position + (Target.GetDirection(transform.position) * speed), Time.deltaTime);
 		// TODO - Rotation
 	}
 

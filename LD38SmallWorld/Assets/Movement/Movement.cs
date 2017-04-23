@@ -7,7 +7,7 @@ public abstract class MovementMotorBase : BehaviorBase
 
 	public ITarget Target;
 	public State state = State.Idle;
-	public float speed;
+	public float speed = 5;
 
 
 	void Awake()

@@ -26,8 +26,11 @@ public class Thug : CharacterBase
 		Health.currentHealth *= strengthMultiplier;
 		Health.regenerationRate *= strengthMultiplier; 
 		bodyCollider = this.GetComponent<Collider>();
+		if (movement == null)
+			movement = GetComponent<MovementMotorBase>();
 		Ensure(bodyCollider.material); // Make sure we can get the impact effect!
 		Ensure(detection);
+		Ensure(movement);
 		this.Assert(detection.isTrigger, "The detection sphere must be a trigger!");
 		state = State.Seeking;
 	}
@@ -44,27 +47,51 @@ public class Thug : CharacterBase
 
 			if (currentTarget != null)
 			{
-				
+				state = State.Attack;
 				break;
 			}
-			// TODO - Raycast towards the player if we have a currentTarget - see if he is in line of site
-			Ray ray = new Ray(transform.position, (currentTarget.transform.position - transform.position).normalized);
-			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, detectionRadius))
+
+			if (LockOn())
 			{
-				if (currentTarget = hit.collider.GetComponentInParent<Player>())
-				{
-					movement.MoveTo(new DynamicTarget(this.transform, currentTarget.transform));
-					state = State.Attack;
-				}
+				state = State.Attack;
 			}
 			break;
 
 			case State.Attack:
 				this.Log("Target locked");
 				// TODO
+				state = State.Attacking;
+				break;
+
+			case State.Attacking:
+				FireAt(currentTarget.transform);
+
+				
+				if (!LockOn())
+				{
+					state = State.Seeking;
+				}
 				break;
 		}
+	}
+
+	private bool LockOn()
+	{
+		var player = Player;
+		// TODO - Raycast towards the player if we have a currentTarget - see if he is in line of site
+
+
+		Ray ray = new Ray(transform.position, (player.transform.position - transform.position).normalized);
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit, detectionRadius))
+		{
+			if (currentTarget = hit.collider.GetComponentInParent<Player>())
+			{
+				movement.MoveTo(new DynamicTarget(this.transform, currentTarget.transform));
+				return true;
+			}
+		}
+		return false;
 	}
 
 

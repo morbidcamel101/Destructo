@@ -16,11 +16,13 @@ public class Gun : BehaviorBase
 	public float range = 10000;
 	public Transform gunChamber;
 	public Transform hand;
+
 	private Bullet chamber = null;
 	private float resumeTime;
 	private Ammo currentAmmo;
 	private bool fire;
 	private Animator anim;
+	private Vector3 target;
 
 
 	// Use this for initialization
@@ -36,16 +38,6 @@ public class Gun : BehaviorBase
 	// Update is called once per frame
 	void Update ()
 	{
-
-		if (Input.GetButtonDown("Fire1"))
-		{
-			fire = true;
-		}
-
-		if (Input.GetButtonUp("Fire1"))
-		{
-			fire = false;
-		}
 		switch(state)
 		{
 			case State.Ready:
@@ -71,7 +63,8 @@ public class Gun : BehaviorBase
 
 			var bulletObj = Spawner.Spawn(currentAmmo.bulletType.prefab, false);
 			chamber = bulletObj.GetComponent<Bullet>();
-			anim.SetBool("Fire", true);
+			if (anim != null)
+				anim.SetBool("Fire", true);
 			state = State.Loading;
 			break;
 
@@ -90,7 +83,8 @@ public class Gun : BehaviorBase
 			break; 
 
 			case State.Fire:
-				anim.SetBool("Fire", false);
+				if (anim != null)
+					anim.SetBool("Fire", false);
 				chamber.enabled = true;
 				chamber = null; // Make ready for the next bullet
 				//fire = false;
@@ -123,7 +117,8 @@ public class Gun : BehaviorBase
 				break;
 			}
 
-			anim.SetBool("Reload", false);
+			if (anim != null)
+				anim.SetBool("Reload", false);
 			// Todo - cleanup animation and sound 
 			state = State.Ready;
 			break;
@@ -139,18 +134,12 @@ public class Gun : BehaviorBase
 
 	void FixedUpdate()
 	{
-		// http://answers.unity3d.com/questions/13022/aiming-gun-at-cursor.html
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition); //Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+		
 
-		Vector3 target;
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit))
-			target = hit.point;
-		else
-			target = ray.GetPoint(100);
-
-		hand.LookAt(hit.point);
-		gunChamber.LookAt(hit.point);
+		if (target == Vector3.zero)
+			return;
+		hand.LookAt(target);
+		gunChamber.LookAt(target);
 	}
 
 	void RecoilStart()
@@ -173,6 +162,34 @@ public class Gun : BehaviorBase
 	public void Reload() 
 	{
 		state = State.Reload;
+	}
+
+	public bool FireAt(Transform target)
+	{
+		return FireAt(target.position);
+	}
+
+	public bool FireAt(Vector3 target)
+	{
+		this.target = target;
+
+		return Fire();
+		
+	}
+
+	public bool Fire()
+	{
+		if (target == Vector3.zero)
+			return false;
+
+		fire = true;
+		return state != State.Empty;
+	}
+
+	public void SetTarget(Vector3 target)
+	{
+		// ToDO - Miss - random inaccuracy
+		this.target = target;
 	}
 }
 

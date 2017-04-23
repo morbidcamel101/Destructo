@@ -17,9 +17,9 @@ public abstract class TargetBase: ITarget
 		return (target - Position).magnitude;
 	}
 
-	public Vector3 DirectionTo(Vector3 source)
+	public Vector3 GetDirection(Vector3 source)
 	{
-		return (source - Position).normalized;
+		return (Position - source).normalized;
 	}
 }
 
