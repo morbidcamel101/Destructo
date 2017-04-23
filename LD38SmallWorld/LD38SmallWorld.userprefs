@@ -1,31 +1,14 @@
-﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
+﻿<Properties StartupItem="LD38SmallWorld.Plugins.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AI/Player.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Mechanics/CharacterManager.cs">
     <Files>
-      <File FileName="Assets/Movement/NavMeshMovement.cs" Line="24" Column="107" />
-      <File FileName="Assets/AI/CharacterBase.cs" Line="66" Column="13" />
-      <File FileName="Assets/Movement/Movement.cs" Line="10" Column="24" />
-      <File FileName="Assets/Movement/TargetBase.cs" Line="22" Column="22" />
-      <File FileName="Assets/Movement/ITarget.cs" Line="15" Column="2" />
-      <File FileName="Assets/Movement/DynamicTarget.cs" Line="1" Column="1" />
-      <File FileName="Assets/Movement/StaticTarget.cs" Line="1" Column="1" />
-      <File FileName="Assets/Projectiles/Gun.cs" Line="182" Column="1" />
-      <File FileName="Assets/Projectiles/Holdster.cs" Line="6" Column="1" />
-      <File FileName="Assets/Mechanics/ThugManager.cs" Line="7" Column="2" />
-      <File FileName="Assets/Mechanics/ViewModels.cs" Line="14" Column="1" />
-      <File FileName="Assets/Mechanics/CharacterManager.cs" Line="81" Column="18" />
-      <File FileName="Assets/Mechanics/SpawnPoint.cs" Line="10" Column="2" />
-      <File FileName="Assets/Utilities/Spawner.cs" Line="30" Column="29" />
-      <File FileName="Assets/Core/Extensions.cs" Line="24" Column="1" />
-      <File FileName="Assets/AI/Thug.cs" Line="138" Column="18" />
-      <File FileName="Assets/AI/Health.cs" Line="11" Column="37" />
-      <File FileName="Assets/AI/Player.cs" Line="45" Column="30" />
+      <File FileName="Assets/Mechanics/CharacterManager.cs" Line="33" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Projectiles/Impact.cs" line="13" column="25" />
-      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Mechanics/CharacterManager.cs" line="117" column="7" />
+      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Mechanics/CharacterManager.cs" line="120" column="7" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
