@@ -50,6 +50,7 @@ public class Gun : BehaviorBase
 		switch(state)
 		{
 			case State.Ready:
+				UpdateAnimatorAndSound(false,false);
 				if (fire)
 				{
 					state = State.Load;
@@ -70,8 +71,7 @@ public class Gun : BehaviorBase
 				currentBullet = bulletObj.GetComponent<Bullet>();
 				currentBullet.Shoot(this.GetComponentInParent<CharacterBase>());
 
-				if (anim != null)
-					anim.SetBool("Fire", true);
+				UpdateAnimatorAndSound(true, false);
 				state = State.Loading;
 			break;
 
@@ -90,27 +90,15 @@ public class Gun : BehaviorBase
 			break; 
 
 			case State.Fire:
-				if (anim != null)
-					anim.SetBool("Fire", false);
-
 				SendMessageUpwards("OnFire", currentBullet, SendMessageOptions.RequireReceiver);
 				currentBullet = null; // Make ready for the next bullet
-				state = State.Ready;
-                
-                float vol = Random.Range(volLowRange, volHighRange);
-                audioSource.PlayOneShot(shootSound, vol);
-
+				UpdateAnimatorAndSound(true, false);
+				state = fire ? State.Load : State.Ready;
                 break;
 
 			case State.Reload:
 				resumeTime = Time.time + reloadTime;
-
-				if (anim != null)
-				{
-					anim.SetBool("Reload", true);
-					anim.SetFloat("ReloadSpeed", (2f/reloadTime));
-				}
-
+				UpdateAnimatorAndSound(false, true);
 				state = State.Reloading;			
 			break;
 
@@ -124,20 +112,18 @@ public class Gun : BehaviorBase
 			case State.Reloaded:
 				currentClip = clipSize;
 				currentAmmo.clips--;
-
+				UpdateAnimatorAndSound(false,false);
 				if (currentAmmo.clips <= 0)
 				{
 					state = State.Empty;
 					break;
 				}
-
-				if (anim != null)
-					anim.SetBool("Reload", false);
 				// Todo - cleanup animation and sound 
 				state = State.Ready;
 			break;
 
 			case State.Empty:
+				UpdateAnimatorAndSound(false, false);
 				if (currentAmmo.clips > 0)
 				{
 					state = State.Reload;
@@ -155,16 +141,33 @@ public class Gun : BehaviorBase
 		gunChamber.LookAt(target);
 	}
 
-
-	void RecoilStart()
+	public void UpdateAnimatorAndSound(bool recoil, bool reload)
 	{
-		
-	}
+		recoil = recoil && !reload;
+		if (anim) 
+		{
+			anim.SetBool(name+"_Recoil", recoil);
+			anim.SetBool("Reload", reload); 
+			anim.SetFloat("ReloadSpeed", (2f/reloadTime));
+		}
+		if (audioSource)
+		{
+			if (recoil)
+			{
+				float vol = Random.Range(volLowRange, volHighRange); // Good!
+				audioSource.volume = vol;
+				audioSource.PlayOneShot(shootSound, vol);
+			}
+			else
+			{
+				audioSource.volume = 0;
+			}
 
-	void RecoilEnd()
-	{
-		if (fire)
-			anim.SetBool("Fire", true);
+			// TODO - Reload
+
+			// TODO - Empty
+
+		}
 	}
 
 

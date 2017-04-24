@@ -16,6 +16,7 @@ public class Player: CharacterBase
 	public float smoothing = 5f;
 	public float zoom = 20f;
 	public float normal = 60f;
+	public float minAimDistance = 20f;
 	public bool isZooming;
 
 	void Awake()
@@ -44,7 +45,7 @@ public class Player: CharacterBase
 
 		if (Input.GetButtonUp("Fire2"))
 		{
-			Fire("rocket");
+			StopFire("rocket");
 		}
 
 
@@ -54,7 +55,10 @@ public class Player: CharacterBase
 	{
 		// http://answers.unity3d.com/questions/13022/aiming-gun-at-cursor.html
 		var ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)); // Camera.main.ScreenPointToRay(Input.mousePosition); 
-		if (Physics.Raycast(ray, out aim.hit))
+
+		var distSqr = minAimDistance * minAimDistance;
+
+		if (Physics.Raycast(ray, out aim.hit) && (aim.hit.point - transform.position).sqrMagnitude > distSqr)
 			SetTarget(aim.hit.point);
 		else
 			SetTarget(ray.GetPoint(1000));
@@ -81,41 +85,18 @@ public class Player: CharacterBase
 			PerformZoom();
 		else
 			PerformUnzoom();
-		/*
-		foreach(var hold in holdsters)
-		{
-			switch(hold.gun.state)
-			{
-				case Gun.State.Fire:
-				case Gun.State.Load:
-				case Gun.State.Loading:
-				case Gun.State.Loaded:
-					PerformZoom();
-					break;
-				default:
-					if (hold.gun.fire)
-					{
-						PerformZoom();
-						break;
-					}
-
-					PerformUnzoom();
-					break;
-			}
-		}*/
-
 	}
 
 	private void PerformZoom()
 	{
-		//cameraMount.transform.position = Vector3.Slerp(head.position, zoomPoint.position, Time.deltaTime * smoothing);
+		//cameraMount.transform.position = Vector3.Lerp(head.position, zoomPoint.position, Time.deltaTime * smoothing);
 		var cam = Camera.main;
 		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, zoom, Time.deltaTime * smoothing);
 	}
 
 	private void PerformUnzoom()
 	{
-		//cameraMount.transform.position = Vector3.Slerp(zoomPoint.position, head.position, Time.deltaTime * smoothing);
+		//cameraMount.transform.position = Vector3.Lerp(zoomPoint.position, head.position, Time.deltaTime * smoothing);
 		var cam = Camera.main;
 		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, normal, Time.deltaTime * smoothing);
 	}
