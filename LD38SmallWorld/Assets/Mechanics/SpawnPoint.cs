@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 
 [AddComponentMenu("Small World/Spawn Point")]
@@ -46,6 +47,11 @@ public class SpawnPoint : BehaviorBase
 		var sphere = GetComponent<SphereCollider>();
 		if (sphere)
 			Destroy(sphere);
+
+		for(int i = transform.childCount-1; i >= 0; i--)
+		{
+			Destroy(transform.GetChild(i).gameObject);
+		}
 	}
 
 	/*void Start()

@@ -120,20 +120,12 @@ public sealed class CharacterManager : BehaviorBase
 			// Credits - http://answers.unity3d.com/questions/475066/how-to-get-a-random-point-on-navmesh.html
 			// Modified
 
-			NavMeshHit hit = default(NavMeshHit);
-			Vector3 randomDirection;
-			var retries = 0;
-			do 
-			{
-				randomDirection = Random.insideUnitSphere * 3f; // not sure
-				randomDirection += transform.position;
-		 	}
-			while (++retries < maxRetries && !NavMesh.SamplePosition(randomDirection, out hit, 3000, 1));
+			var randPos = GetRandomPosition(transform.position, 500);
 
-			if (retries >= maxRetries)
+			if (randPos == null)
 				continue;
 
-			var pos = this.terrain.position + hit.position + (this.terrain.up * dropHeight);
+			var pos = this.terrain.position + randPos.Value + (this.terrain.up * dropHeight);
 			var obj = Spawner.Spawn(spawnPointPrefab, false, pos, Quaternion.identity);
 			spawns.Add(obj.GetComponent<SpawnPoint>());
 			obj.transform.parent = this.transform;
@@ -144,6 +136,24 @@ public sealed class CharacterManager : BehaviorBase
 			Debug.LogError("There are now spawn points defined!");
 			enabled = false;
 		}
+	}
+
+	public Vector3? GetRandomPosition(Vector3 pos, float distance)
+	{
+		NavMeshHit hit = default(NavMeshHit);
+		Vector3 randomDirection;
+		var retries = 0;
+		do 
+		{
+			randomDirection = Random.insideUnitSphere.normalized; // not sure
+			randomDirection += pos;
+	 	}
+		while (++retries < maxRetries && !NavMesh.SamplePosition(randomDirection, out hit, distance, 1));
+
+		if (retries >= maxRetries)
+			return null;
+
+		return null;
 	}
 
 	// Singleton

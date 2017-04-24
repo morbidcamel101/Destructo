@@ -10,15 +10,17 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Impact))]
 public class Thug : CharacterBase
 {
-	public enum State { Seeking, Attack, Attacking, Attacked, Hide, Hiding }
+	public enum State { Seeking, Inspect, Attack, Attacking, Attacked, Hide, Hiding }
 	public float strengthMultiplier = 1f;
 	public float alertness = 0.5f;
 	public State state;
+	public float decisionDelay = 10f;
 	public SphereCollider detection;
 	public float detectionRadius { get { return detection.radius; } }
 	private MovementMotorBase movement;
 	private CharacterBase currentTarget;
 	private float resumeTime;
+	public float inspectTime;
 	private Collider bodyCollider;
 
 	void Awake()
@@ -58,6 +60,23 @@ public class Thug : CharacterBase
 			{
 				state = State.Attack;
 			}
+
+			if (Time.time > inspectTime)
+			{
+				state = State.Inspect;
+			}
+			break;
+
+			case State.Inspect:
+			var target = CharacterManager.Instance.GetRandomPosition(transform.position, UnityEngine.Random.value * 50f);
+			if (target == null)
+			{
+				state = State.Seeking;
+				break;
+			}
+			movement.MoveTo(new StaticTarget(target.Value, (target.Value - transform.position).normalized));
+			inspectTime = Time.time + inspectTime;
+			state = State.Seeking;
 			break;
 
 			case State.Attack:

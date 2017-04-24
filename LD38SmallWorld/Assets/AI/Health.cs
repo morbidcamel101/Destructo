@@ -15,7 +15,12 @@ public sealed class Health: BehaviorBase
     
     void OnImpact(Bullet bullet)
 	{
-		currentHealth = Mathf.Clamp(currentHealth - bullet.damage, 0f, totalHealth);
+		Impact(bullet.damage);
+	}
+
+	public void Impact(float damage)
+	{
+		currentHealth = Mathf.Clamp(currentHealth - damage, 0f, totalHealth);
 
 		var critical = totalHealth * criticalPercentage;
 		var low = totalHealth * lowPercentage;
@@ -32,8 +37,6 @@ public sealed class Health: BehaviorBase
 		{
 			SendMessage("OnLowHealth", SendMessageOptions.RequireReceiver);
 		}
-
-
 	}
 
 	void Update()

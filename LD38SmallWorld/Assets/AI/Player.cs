@@ -18,12 +18,18 @@ public class Player: CharacterBase
 	public float normal = 60f;
 	public float minAimDistance = 20f;
 	public bool isZooming;
+	public bool dead {
+		get { return health.dead; }
+	}
+
+	internal Health health;
 
 	void Awake()
 	{
 		Ensure(head);
 		Ensure(zoomPoint);
 		Ensure(cameraMount);
+		health = GetComponent<Health>();
 	}
 
 	void Update()

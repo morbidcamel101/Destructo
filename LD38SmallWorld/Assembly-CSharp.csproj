@@ -77,6 +77,7 @@
      <Compile Include="Assets\Projectiles\Gun.cs" />
      <Compile Include="Assets\Projectiles\Holdster.cs" />
      <Compile Include="Assets\Projectiles\Impact.cs" />
+     <Compile Include="Assets\Utilities\NoGoZone.cs" />
      <Compile Include="Assets\Utilities\Spawner.cs" />
      <Compile Include="Assets\Utilities\Trash.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
