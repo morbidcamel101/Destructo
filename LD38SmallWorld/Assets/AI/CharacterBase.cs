@@ -81,8 +81,10 @@ public abstract class CharacterBase: BehaviorBase
 
 	protected virtual void OnFire(Bullet bullet)
 	{
-		// Bullet is send!!
+		// Bullet is sent!!
 		bullet.sender = this; // From Russia with love :)
+
+
 	}
 
 	

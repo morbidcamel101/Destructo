@@ -16,6 +16,7 @@ public class Gun : BehaviorBase
 	public float range = 10000;
 	public Transform gunChamber;
 	public float reactionSpeed = 1f;
+    public AudioClip shootSound;
 
 	private Bullet currentBullet = null;
 	private float resumeTime;
@@ -23,10 +24,12 @@ public class Gun : BehaviorBase
 	internal bool fire;
 	private Animator anim;
 	private Vector3 target;
+    private AudioSource audioSource;
+    private float volLowRange = .5f;
+    private float volHighRange = 1.0f;
 
-
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
 	{
 		Ensure(gunChamber);
 		this.Assert(ammo.Length > 0, "No ammo assigned!");
@@ -34,9 +37,14 @@ public class Gun : BehaviorBase
 		Ensure(currentAmmo.bulletType, "Invalid Ammo Assigned!");
 		anim = GetComponentInChildren<Animator>();
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    // Update is called once per frame
+    void Update ()
 	{
 		switch(state)
 		{
@@ -87,7 +95,11 @@ public class Gun : BehaviorBase
 				SendMessageUpwards("OnFire", currentBullet, SendMessageOptions.RequireReceiver);
 				currentBullet = null; // Make ready for the next bullet
 				state = State.Ready;
-			break;
+                
+                float vol = Random.Range(volLowRange, volHighRange);
+                audioSource.PlayOneShot(shootSound, vol);
+
+                break;
 
 			case State.Reload:
 				resumeTime = Time.time + reloadTime;
@@ -184,7 +196,8 @@ public class Gun : BehaviorBase
 			return false;
 
 		fire = true;
-		return state != State.Empty;
+
+        return state != State.Empty;
 	}
 
 	public void StopFire()
