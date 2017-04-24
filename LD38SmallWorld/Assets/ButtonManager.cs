@@ -5,51 +5,83 @@ using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
+    public AudioClip buttonSelectSound;
+
+    private AudioSource audioSource;
+    private float volLowRange = .5f;
+    private float volHighRange = 1.0f;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     public void StartGameButton(string newGameLevel)
     {
+        PlayButtonSelect();
         SceneManager.LoadScene(newGameLevel);
     }
 
     public void LoadGameButton(string loadGameLevel)
     {
+        PlayButtonSelect();
         SceneManager.LoadScene(loadGameLevel);
     }
 
     public void RetryGameButton(string loadGameLevel)
     {
+        PlayButtonSelect();
         SceneManager.LoadScene(loadGameLevel);
     }
 
     public void CreditsButton()
     {
+        PlayButtonSelect();
+
         // Dev Team Credits Page
         SceneManager.LoadScene("Credits");
     }
 
     public void DevelopedByButton()
     {
+        PlayButtonSelect();
+
         // Dev Team Website
         // TODO: Link to dev team
     }
 
     public void ControlsButton()
     {
+        PlayButtonSelect();
         SceneManager.LoadScene("Controls");
     }
 
     public void MainMenuButton()
     {
+        PlayButtonSelect();
         SceneManager.LoadScene("MainMenu");
     }
 
     public void ExitGameButton()
     {
+        PlayButtonSelect();
         Application.Quit();
     }
 
     public void BackButton()
     {
+        PlayButtonSelect();
+
         // Return to previous screen
         SceneManager.LoadScene("MainMenu");
+    }
+
+    private void PlayButtonSelect()
+    {
+        if (buttonSelectSound != null)
+        {
+            float vol = Random.Range(volLowRange, volHighRange);
+            audioSource.PlayOneShot(buttonSelectSound, vol);
+        }
     }
 }

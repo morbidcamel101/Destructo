@@ -101,7 +101,7 @@
     <Compile Include="Assets\Mechanics\CharacterManager.cs" />
     <Compile Include="Assets\Mechanics\MaterialImpactManager.cs" />
     <Compile Include="Assets\Mechanics\SpawnPoint.cs" />
-    <Compile Include="Assets\Mechanics\TerainManager.cs" />
+    <Compile Include="Assets\Mechanics\TerrainManager.cs" />
     <Compile Include="Assets\Mechanics\ThugManager.cs" />
     <Compile Include="Assets\Mechanics\ViewModels.cs" />
     <Compile Include="Assets\Movement\DynamicTarget.cs" />
@@ -116,6 +116,7 @@
     <Compile Include="Assets\Projectiles\Holdster.cs" />
     <Compile Include="Assets\Projectiles\Impact.cs" />
     <Compile Include="Assets\Utilities\Spawner.cs" />
+    <Compile Include="Assets\Utilities\Trash.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
