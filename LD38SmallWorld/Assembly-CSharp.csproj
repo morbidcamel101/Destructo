@@ -51,7 +51,6 @@
      <Compile Include="Assets\AI\Player.cs" />
      <Compile Include="Assets\AI\Thug.cs" />
      <Compile Include="Assets\AI\ViewModels.cs" />
-     <Compile Include="Assets\ButtonManager.cs" />
      <Compile Include="Assets\Core\BehaviorBase.cs" />
      <Compile Include="Assets\Core\Extensions.cs" />
      <Compile Include="Assets\Core\Prototype.cs" />
@@ -64,8 +63,9 @@
      <Compile Include="Assets\Mechanics\MaterialImpactManager.cs" />
      <Compile Include="Assets\Mechanics\SpawnPoint.cs" />
      <Compile Include="Assets\Mechanics\TerrainManager.cs" />
-     <Compile Include="Assets\Mechanics\ThugManager.cs" />
      <Compile Include="Assets\Mechanics\ViewModels.cs" />
+     <Compile Include="Assets\Menu\ButtonManager.cs" />
+     <Compile Include="Assets\Menu\GameStatsHolder.cs" />
      <Compile Include="Assets\Movement\DynamicTarget.cs" />
      <Compile Include="Assets\Movement\ITarget.cs" />
      <Compile Include="Assets\Movement\Movement.cs" />

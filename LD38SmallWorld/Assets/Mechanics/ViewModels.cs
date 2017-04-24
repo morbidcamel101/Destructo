@@ -8,6 +8,7 @@ public sealed class CharacterDefinition
 	public string title;
 	public float strengthMultiplier = 1f;
 	public Prototype character;
+	public int points = 100;
 
 }
 

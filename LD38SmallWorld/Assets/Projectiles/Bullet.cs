@@ -11,6 +11,7 @@ public class Bullet : BehaviorBase
 	public float distance = 10000;
 	public float damage = 10f;
 	public float force = 100f;
+	public float strengthMultiplier = 1f;
 	internal bool didHit = false;
 
 	public CharacterBase sender;

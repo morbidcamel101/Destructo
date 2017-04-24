@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityStandardAssets.Effects;
 
 [AddComponentMenu("Small World/Impact")]
 [RequireComponent(typeof(Collider))]
@@ -15,13 +16,18 @@ public class Impact: BehaviorBase
 		material = GetComponent<Collider> ().sharedMaterial;
 	}
 
-	private void SpawnEffect ( MaterialImpactManager.ImpactEffect effect, Vector3 position, Quaternion rotation)
+	private void SpawnEffect ( MaterialImpactManager.ImpactEffect effect, Vector3 position, Quaternion rotation, Bullet bullet)
 	{
 		if (effect == null || effect.effect == null)
 			return;
 			
 		// Kick off effect and recycle
 		var instance = Spawner.Spawn (effect.effect, true, position, rotation);
+		var force = instance.GetComponent<ExplosionPhysicsForce>();
+		if (force)
+		{
+			force.explosionForce = 0;//bullet.force * bullet.strengthMultiplier; // Don't let physics mess it up for now
+		}
 		Spawner.Recycle (instance, duration);
 	}
 
@@ -39,7 +45,7 @@ public class Impact: BehaviorBase
 			{
 				// bullet was used
 				var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
-				SpawnEffect (impactEffect, point, Quaternion.Euler(normal));
+				SpawnEffect (impactEffect, point, Quaternion.Euler(normal), bullet);
 			}
 		}
 	}

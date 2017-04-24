@@ -12,28 +12,36 @@ public sealed class Health: BehaviorBase
 	public float criticalPercentage = 0.2f;
 	public float lowPercentage = 0.5f;
 	public bool dead = false;
+
+	public bool IsLow {
+		get { return currentHealth <= totalHealth * lowPercentage; }
+	}
+
+	public bool IsCritical {
+		get { return currentHealth <= totalHealth * criticalPercentage; }
+	}
+
+
     
     void OnImpact(Bullet bullet)
 	{
-		Impact(bullet.damage);
+		Impact(bullet.damage * bullet.strengthMultiplier);
 	}
 
 	public void Impact(float damage)
 	{
 		currentHealth = Mathf.Clamp(currentHealth - damage, 0f, totalHealth);
 
-		var critical = totalHealth * criticalPercentage;
-		var low = totalHealth * lowPercentage;
 		if (currentHealth == 0)
 		{
 			dead = true;
 			SendMessage("OnDeath", SendMessageOptions.RequireReceiver);
 		}
-		else if (currentHealth <= critical)
+		else if (IsCritical)
 		{
 			SendMessage("OnCriticalHealth", SendMessageOptions.RequireReceiver);
 		}
-		else if (currentHealth <= low)
+		else if (IsLow)
 		{
 			SendMessage("OnLowHealth", SendMessageOptions.RequireReceiver);
 		}

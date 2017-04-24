@@ -27,7 +27,7 @@ public sealed class CharacterManager : BehaviorBase
 	public float spawnInterval = 10f;
 	public int population = 100;
 	public int activePopulation = 20;
-	public float strengthMultiplier = 1f;
+	public float maxStrengthMultiplier = 10f;
 
 
 
@@ -153,7 +153,7 @@ public sealed class CharacterManager : BehaviorBase
 		if (retries >= maxRetries)
 			return null;
 
-		return null;
+		return hit.position;
 	}
 
 	// Singleton
@@ -214,11 +214,18 @@ public sealed class CharacterManager : BehaviorBase
 
 		var character = GetRandomCharacter();
 
-		var obj = Spawner.Spawn(character.character, false, spawnPoint.transform.position + spawnPoint.offset, spawnPoint.transform.rotation);
+		var obj = Spawner.Spawn(character.character, false, spawnPoint.transform.position + spawnPoint.offset, Quaternion.identity);
 		var spawn = obj.GetComponent<CharacterBase>();
 		if (spawn != null)
 		{
+			Thug thug = spawn as Thug;
+			if (thug != null)
+			{
+				thug.strengthMultiplier = (UnityEngine.Random.value * character.strengthMultiplier);
+				thug.strengthMultiplier *= this.maxStrengthMultiplier;
+			}
 			spawn.Randomize();
+
 			spawned.Add(obj);
 		}
 

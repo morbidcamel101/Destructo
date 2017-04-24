@@ -16,6 +16,7 @@ public class Gun : BehaviorBase
 	public float range = 10000;
 	public Transform gunChamber;
 	public float reactionSpeed = 1f;
+	public float strengthMultiplier = 1f;
 
     public AudioClip shootSound;
 
@@ -44,6 +45,12 @@ public class Gun : BehaviorBase
         audioSource = GetComponent<AudioSource>();
     }
 
+    public void Reset()
+    {
+    	reactionSpeed = reactionSpeed / strengthMultiplier;
+    	fireRate = fireRate / strengthMultiplier;
+    }
+
     // Update is called once per frame
     void Update ()
 	{
@@ -69,6 +76,7 @@ public class Gun : BehaviorBase
 				var bulletObj = Spawner.Spawn(currentAmmo.bulletType.prefab, false, gunChamber.position, gunChamber.rotation);
 
 				currentBullet = bulletObj.GetComponent<Bullet>();
+				currentBullet.strengthMultiplier = this.strengthMultiplier;
 				currentBullet.Shoot(this.GetComponentInParent<CharacterBase>());
 
 				UpdateAnimatorAndSound(true, false);

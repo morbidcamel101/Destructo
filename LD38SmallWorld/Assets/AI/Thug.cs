@@ -21,7 +21,10 @@ public class Thug : CharacterBase
 	private CharacterBase currentTarget;
 	private float resumeTime;
 	public float inspectTime;
+	public Prototype smokePrefab;
+	internal int points = 100;
 	private Collider bodyCollider;
+
 
 	void Awake()
 	{
@@ -129,6 +132,7 @@ public class Thug : CharacterBase
 	protected override void OnDeath ()
 	{
 		CharacterManager.Instance.Dead(this.gameObject);
+		Player.score += points;
 	}
 
 	protected override void OnCriticalHealth ()
@@ -139,7 +143,6 @@ public class Thug : CharacterBase
 
 	protected override void OnLowHealth ()
 	{
-		// TODO - Health is low --- find cover
 
 	}
 
@@ -147,6 +150,15 @@ public class Thug : CharacterBase
 	{
 		if (bullet.sender is Player)
 			bullet.Hit();
+
+		if (Health.IsLow)
+		{
+			if (smokePrefab.prefab)
+			{
+				var obj = Spawner.Spawn(smokePrefab, false, bullet.transform.position, Quaternion.identity);
+				Spawner.Recycle(obj, 5f);
+			}
+		}
 	}
 
 	protected override void OnImpact (Bullet bullet)
@@ -154,13 +166,20 @@ public class Thug : CharacterBase
 		currentTarget = bullet.sender;
 		Player.score += Convert.ToInt32(bullet.damage);
 
-		GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.force, ForceMode.Impulse);
+		//GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.force, ForceMode.Impulse);
 	}
 
 	public override void Randomize ()
 	{
-		this.strengthMultiplier = UnityEngine.Random.Range(1f, CharacterManager.Instance.strengthMultiplier);
+		this.strengthMultiplier = UnityEngine.Random.Range(1f, CharacterManager.Instance.maxStrengthMultiplier);
+		this.Health.totalHealth = 100 * strengthMultiplier;
 		this.Health.Reset();
+		for(int i = 0; i < holdsters.Length; i++)
+		{
+			holdsters[i].gun.strengthMultiplier = this.strengthMultiplier;
+			holdsters[i].gun.Reset();
+
+		}
 		base.Randomize ();
 	}
 

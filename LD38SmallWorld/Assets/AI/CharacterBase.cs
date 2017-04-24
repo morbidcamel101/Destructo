@@ -23,6 +23,7 @@ public abstract class CharacterBase: BehaviorBase
 
 	public virtual void Randomize()
 	{
+		
 	}
 
 	public Holdster[] holdsters; // Desscribe the guns
