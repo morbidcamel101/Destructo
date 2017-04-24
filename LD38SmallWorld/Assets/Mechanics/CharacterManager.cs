@@ -87,7 +87,11 @@ public sealed class CharacterManager : BehaviorBase
 					if (!spawnPoint.IsReady)
 					{
 						return;
-					}	
+					}
+				}
+				foreach(var spawn in spawnPoints)
+				{
+					spawn.Deploy();
 				}
 				state = State.Monitoring;
 				break;

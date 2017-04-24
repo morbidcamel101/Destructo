@@ -25,6 +25,29 @@ public class SpawnPoint : BehaviorBase
 
 	}
 
+
+	void Awake()
+	{
+		var boxCol = GetComponent<BoxCollider>();
+		if (boxCol != null)
+			Destroy(boxCol);
+
+		var sphere = gameObject.AddComponent<SphereCollider>();
+		sphere.radius = 0.5f;
+	}
+
+
+	public void Deploy()
+	{
+		var rigid = GetComponent<Rigidbody>();
+		if (rigid)
+			Destroy(rigid);
+
+		var sphere = GetComponent<SphereCollider>();
+		if (sphere)
+			Destroy(sphere);
+	}
+
 	/*void Start()
 	{
 		isReady = false;
