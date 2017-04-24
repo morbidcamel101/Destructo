@@ -119,9 +119,10 @@ public class Player: CharacterBase
 
         // Respawn until game over;
 
-        //SceneManager.LoadScene("GameOver");
-        
-        throw new NotImplementedException();
+        // Set static score before opening next scene
+        GameStatsHolder.scoreTotal = score;
+
+        SceneManager.LoadScene("GameOver");
 	}
 
 	protected override void OnCriticalHealth ()

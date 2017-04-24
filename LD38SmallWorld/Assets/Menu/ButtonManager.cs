@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
+    public Text scoreText;
+
     public AudioClip buttonSelectSound;
 
     private AudioSource audioSource;
@@ -14,6 +17,16 @@ public class ButtonManager : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+    }
+
+    private void Update()
+    {
+        SetScoreText();
+    }
+
+    private void SetScoreText()
+    {
+        scoreText.text = string.Format("Score: {0}", GameStatsHolder.scoreTotal.ToString());
     }
 
     public void StartGameButton(string newGameLevel)
