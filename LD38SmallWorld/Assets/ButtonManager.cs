@@ -50,5 +50,6 @@ public class ButtonManager : MonoBehaviour
     public void BackButton()
     {
         // Return to previous screen
+        SceneManager.LoadScene("MainMenu");
     }
 }

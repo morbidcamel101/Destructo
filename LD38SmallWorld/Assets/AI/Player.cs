@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
+using UnityEngine.SceneManagement;
 
 [AddComponentMenu("Small World/Player")]
 [RequireComponent(typeof(Health))]
@@ -53,12 +54,11 @@ public class Player: CharacterBase
 		//this.GetComponent<FirstPersonController>().enabled = false;
 		Log("YOU ARE DEAD! GAME OVER!");
 
-		// Respawn until game over;
+        // Respawn until game over;
 
-
-		
-		throw new NotImplementedException();
-
+        //SceneManager.LoadScene("GameOver");
+        
+        throw new NotImplementedException();
 	}
 
 	protected override void OnCriticalHealth ()
