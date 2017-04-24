@@ -54,7 +54,7 @@ public class ScoreMeterManager : UIBehavior
     private void SetDroneText()
     {
         if (droneText != null)
-            droneText.text = string.Format("DRONES: {0}", Convert.ToInt32(CharacterManager.Instance.activePopulation));
+            droneText.text = string.Format("DRONES: {0}", Convert.ToInt32(droneCount));
     }
 
     private void SetScoreText()
