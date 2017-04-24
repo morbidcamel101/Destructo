@@ -8,6 +8,17 @@ public class ScoreMeterManager : UIBehavior
 {
     #region Properties
 
+    public float droneCount
+    {
+        get
+        {
+            if (CharacterManager.Instance != null)
+                return CharacterManager.Instance.population;
+            else
+                return 0;
+        }
+    }
+
     public float score
     {
         get
@@ -19,6 +30,7 @@ public class ScoreMeterManager : UIBehavior
         }
     }
 
+    public Text droneText;
     public Text scoreText;
 
     #endregion
@@ -28,15 +40,23 @@ public class ScoreMeterManager : UIBehavior
     // Use this for initialization
     void Start ()
     {
+        droneText.text = "0";
         scoreText.text = "0";
 	}
 
     // Update is called once per frame
     protected override void UpdateUI()
     {
+        SetDroneText();
         SetScoreText();
     }
-    
+
+    private void SetDroneText()
+    {
+        if (droneText != null)
+            droneText.text = string.Format("DRONES: {0}", Convert.ToInt32(CharacterManager.Instance.activePopulation));
+    }
+
     private void SetScoreText()
     {
         if (scoreText != null)
