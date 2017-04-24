@@ -200,7 +200,7 @@ public sealed class CharacterManager : BehaviorBase
 
 		var character = GetRandomCharacter();
 
-		var obj = Spawner.Spawn(character.character, false, spawnPoint.transform.position, spawnPoint.transform.rotation);
+		var obj = Spawner.Spawn(character.character, false, spawnPoint.transform.position + spawnPoint.offset, spawnPoint.transform.rotation);
 		var spawn = obj.GetComponent<CharacterBase>();
 		if (spawn != null)
 		{

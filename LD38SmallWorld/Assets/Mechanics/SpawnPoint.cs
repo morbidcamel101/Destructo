@@ -8,6 +8,7 @@ public class SpawnPoint : BehaviorBase
 	public float delay = 5;
 	public float checkDelay = 5f;
 	internal float resumeTime;
+	public Vector3 offset = new Vector3(1f, 0.2f);
 
 	//private bool isReady = false;
 

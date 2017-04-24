@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.AI;
 
 [AddComponentMenu("Small World/Thug")]
 [RequireComponent(typeof(Health))]
@@ -44,6 +45,7 @@ public class Thug : CharacterBase
 			if (Time.time < resumeTime)
 				return;
 
+			UpdateNav(); 
 			resumeTime = Time.time + alertness;
 
 			if (currentTarget != null)
@@ -141,6 +143,15 @@ public class Thug : CharacterBase
 		this.strengthMultiplier = UnityEngine.Random.Range(1f, CharacterManager.Instance.strengthMultiplier);
 		this.Health.Reset();
 		base.Randomize ();
+	}
+
+	internal void UpdateNav()
+	{
+		var agent = GetComponent<NavMeshAgent>();
+		if (agent != null && !agent.enabled)
+		{
+			agent.enabled = true;
+		}
 	}
 }
 
