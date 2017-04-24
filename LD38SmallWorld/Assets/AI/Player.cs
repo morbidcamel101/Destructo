@@ -58,46 +58,46 @@ public class Player: CharacterBase
 
 
 		// Check the gun status
-		var gun = GetGun("rocket");  // YES!!
-		if (gun != null)
-		{
-			UpdateRocket(gun);
-		}
+		UpdateGuns();
 			
 	}
 
-	private void UpdateRocket(Gun gun)
+	private void UpdateGuns()
 	{
-		switch(gun.state)
+		foreach(var hold in holdsters)
 		{
-			case Gun.State.Fire:
-			case Gun.State.Load:
-			case Gun.State.Loading:
-			case Gun.State.Loaded:
-				PerformZoom();
-				break;
-			default:
-				if (gun.fire)
-				{
+			switch(hold.gun.state)
+			{
+				case Gun.State.Fire:
+				case Gun.State.Load:
+				case Gun.State.Loading:
+				case Gun.State.Loaded:
 					PerformZoom();
 					break;
-				}
+				default:
+					if (hold.gun.fire)
+					{
+						PerformZoom();
+						break;
+					}
 
-				PerformUnzoom();
-				break;
+					PerformUnzoom();
+					break;
+			}
 		}
+
 	}
 
 	private void PerformZoom()
 	{
-		cameraMount.transform.position = Vector3.Slerp(head.position, zoomPoint.position, Time.deltaTime * smoothing);
+		//cameraMount.transform.position = Vector3.Slerp(head.position, zoomPoint.position, Time.deltaTime * smoothing);
 		var cam = Camera.main;
 		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, zoom, Time.deltaTime * smoothing);
 	}
 
 	private void PerformUnzoom()
 	{
-		cameraMount.transform.position = Vector3.Slerp(zoomPoint.position, head.position, Time.deltaTime * smoothing);
+		//cameraMount.transform.position = Vector3.Slerp(zoomPoint.position, head.position, Time.deltaTime * smoothing);
 		var cam = Camera.main;
 		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, normal, Time.deltaTime * smoothing);
 	}
