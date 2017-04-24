@@ -24,7 +24,6 @@ public class Bullet : BehaviorBase
 	void Awake()
 	{
 		enabled = false;
-		rigid = GetComponent<Rigidbody>();
 		this.Assert(damage > 0, "Bullet cannot have zero damage");
 	}
 
@@ -57,15 +56,13 @@ public class Bullet : BehaviorBase
 	public virtual void Hit() 
 	{
 		didHit = true;
-		Recycle();
+
 	}
 
 	public void Recycle()
 	{
 		enabled = false;
-		if (rigid)
-			rigid.isKinematic = true;
-		Spawner.Recycle(gameObject);
+		Spawner.Recycle(gameObject, 0.2f);
 	}
 }
 

@@ -150,6 +150,8 @@ public class Thug : CharacterBase
 	{
 		if (bullet.sender is Player)
 			bullet.Hit();
+		else 
+			return;
 
 		if (Health.IsLow)
 		{
