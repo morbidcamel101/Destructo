@@ -13,16 +13,15 @@ public class Player: CharacterBase
 	public Transform head;
 	public Transform zoomPoint;
 	public Transform cameraMount;
-	public float focusTime = 1;
-	private float zoomTime;
-	private float unzoomTime;
+	public float smoothing = 5f;
+	public float zoom = 20f;
+	public float normal = 60f;
 
 	void Awake()
 	{
 		Ensure(head);
 		Ensure(zoomPoint);
 		Ensure(cameraMount);
-		this.Assert(focusTime > 0, "Focus time needs to be > 0");
 	}
 
 	void Update()
@@ -55,23 +54,23 @@ public class Player: CharacterBase
 		if (Physics.Raycast(ray, out aim.hit))
 			SetTarget(aim.hit.point);
 		else
-			SetTarget(ray.GetPoint(10000));
+			SetTarget(ray.GetPoint(1000));
 
 
 		// Check the gun status
 		var gun = GetGun("rocket");  // YES!!
 		if (gun != null)
 		{
-			UpdateGunBehavior(gun);
+			UpdateRocket(gun);
 		}
 			
 	}
 
-	private void UpdateGunBehavior(Gun gun)
+	private void UpdateRocket(Gun gun)
 	{
 		switch(gun.state)
 		{
-			case Gun.State.Fire: 
+			case Gun.State.Fire:
 			case Gun.State.Load:
 			case Gun.State.Loading:
 			case Gun.State.Loaded:
@@ -91,22 +90,16 @@ public class Player: CharacterBase
 
 	private void PerformZoom()
 	{
-		if (zoomTime > 0)
-		{
-			var t =  Mathf.Clamp01( (zoomTime - Time.time) / focusTime );
-			cameraMount.transform.position = Vector3.Slerp(head.position, zoomPoint.position, t);
-		}
-		unzoomTime = Time.time + focusTime;
+		cameraMount.transform.position = Vector3.Slerp(head.position, zoomPoint.position, Time.deltaTime * smoothing);
+		var cam = Camera.main;
+		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, zoom, Time.deltaTime * smoothing);
 	}
 
 	private void PerformUnzoom()
 	{
-		if (unzoomTime > 0)
-		{
-			var t1 = Mathf.Clamp01( (unzoomTime - Time.time) / focusTime );
-			cameraMount.transform.position = Vector3.Slerp(zoomPoint.position, head.position, t1);
-		}
-		zoomTime = Time.time + focusTime;
+		cameraMount.transform.position = Vector3.Slerp(zoomPoint.position, head.position, Time.deltaTime * smoothing);
+		var cam = Camera.main;
+		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, normal, Time.deltaTime * smoothing);
 	}
 
 	public override void SetTarget (Vector3 target)

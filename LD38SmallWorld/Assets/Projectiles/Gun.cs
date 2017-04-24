@@ -15,6 +15,7 @@ public class Gun : BehaviorBase
 	public float changeTime = 0.5f;
 	public float range = 10000;
 	public Transform gunChamber;
+	public float reactionSpeed = 1f;
 
 	private Bullet currentBullet = null;
 	private float resumeTime;
@@ -130,19 +131,17 @@ public class Gun : BehaviorBase
 				}
 			break;
 		}
-	}
-
-	void FixedUpdate()
-	{
-		
 
 		if (target == Vector3.zero)
 			return;
 
+		var rotation =  Quaternion.LookRotation(target - transform.position);
+ 		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * reactionSpeed);
 
-		this.transform.LookAt(target);
+		//this.transform.LookAt(target);
 		gunChamber.LookAt(target);
 	}
+
 
 	void RecoilStart()
 	{
