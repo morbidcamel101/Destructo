@@ -19,7 +19,7 @@ public class Gun : BehaviorBase
 	private Bullet currentBullet = null;
 	private float resumeTime;
 	private Ammo currentAmmo;
-	private bool fire;
+	internal bool fire;
 	private Animator anim;
 	private Vector3 target;
 
@@ -43,11 +43,6 @@ public class Gun : BehaviorBase
 				if (fire)
 				{
 					state = State.Load;
-				}
-
-				if (Input.GetButtonDown("Fire2"))
-				{
-					ChangeAmmo();
 				}
 			break;
 

@@ -9,18 +9,41 @@ public class Player: CharacterBase
 	public int score = 0;
 	internal HitInfo aim = new HitInfo();
 
+	public Transform head;
+	public Transform zoomPoint;
+	public Transform cameraMount;
+	public float focusTime = 1;
+	private float zoomTime;
+	private float unzoomTime;
 
+	void Awake()
+	{
+		Ensure(head);
+		Ensure(zoomPoint);
+		Ensure(cameraMount);
+		this.Assert(focusTime > 0, "Focus time needs to be > 0");
+	}
 
 	void Update()
 	{
 		if (Input.GetButtonDown("Fire1"))
 		{
-			Fire();
+			Fire("uzi");
 		}
 
 		if (Input.GetButtonUp("Fire1"))
 		{
-			StopFire();
+			StopFire("uzi");
+		}
+
+		if (Input.GetButtonDown("Fire2"))
+		{
+			Fire("rocket");
+		}
+
+		if (Input.GetButtonUp("Fire2"))
+		{
+			Fire("rocket");
 		}
 	}
 
@@ -28,13 +51,61 @@ public class Player: CharacterBase
 	{
 		// http://answers.unity3d.com/questions/13022/aiming-gun-at-cursor.html
 		var ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)); // Camera.main.ScreenPointToRay(Input.mousePosition); 
-
-
-
 		if (Physics.Raycast(ray, out aim.hit))
 			SetTarget(aim.hit.point);
 		else
 			SetTarget(ray.GetPoint(10000));
+
+
+		// Check the gun status
+		var gun = GetGun("rocket");  // YES!!
+		if (gun != null)
+		{
+			UpdateGunBehavior(gun);
+		}
+			
+	}
+
+	private void UpdateGunBehavior(Gun gun)
+	{
+		switch(gun.state)
+		{
+			case Gun.State.Fire: 
+			case Gun.State.Load:
+			case Gun.State.Loading:
+			case Gun.State.Loaded:
+				PerformZoom();
+				break;
+			default:
+				if (gun.fire)
+				{
+					PerformZoom();
+					break;
+				}
+
+				PerformUnzoom();
+				break;
+		}
+	}
+
+	private void PerformZoom()
+	{
+		if (zoomTime > 0)
+		{
+			var t =  Mathf.Clamp01( (zoomTime - Time.time) / focusTime );
+			cameraMount.transform.position = Vector3.Slerp(head.position, zoomPoint.position, t);
+		}
+		unzoomTime = Time.time + focusTime;
+	}
+
+	private void PerformUnzoom()
+	{
+		if (unzoomTime > 0)
+		{
+			var t1 = Mathf.Clamp01( (unzoomTime - Time.time) / focusTime );
+			cameraMount.transform.position = Vector3.Slerp(zoomPoint.position, head.position, t1);
+		}
+		zoomTime = Time.time + focusTime;
 	}
 
 	public override void SetTarget (Vector3 target)

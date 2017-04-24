@@ -10,6 +10,7 @@ public class Bullet : BehaviorBase
 	public float lifeTime = 0.5f;
 	public float distance = 10000;
 	public float damage = 10f;
+	public float force = 100f;
 	internal bool didHit = false;
 
 	public CharacterBase sender;

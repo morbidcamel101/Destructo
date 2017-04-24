@@ -10,20 +10,25 @@ ModelImporter:
     100004: Handle
     100006: Arm
     100008: Main
+    100010: Scope
     400000: Barrel
     400002: //RootNode
     400004: Handle
     400006: Arm
     400008: Main
+    400010: Scope
     2300000: Barrel
     2300002: Handle
     2300004: Arm
+    2300006: Scope
     3300000: Barrel
     3300002: Handle
     3300004: Arm
+    3300006: Scope
     4300000: Barrel
     4300002: Handle
     4300004: Arm
+    4300006: Scope
     7400000: Recoil
     7400002: GunIdle
     7400004: Reload

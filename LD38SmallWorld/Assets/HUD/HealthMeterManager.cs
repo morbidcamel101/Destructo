@@ -34,7 +34,7 @@ public class HealthMeterManager : UIBehavior
         get
         {
             if (Player != null)
-                return Player.Health.regenerationDuration;
+                return Player.Health.regenerationRate;
             else
                 return 0;
         }

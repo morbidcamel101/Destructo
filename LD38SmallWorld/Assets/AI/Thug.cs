@@ -133,7 +133,7 @@ public class Thug : CharacterBase
 		currentTarget = bullet.sender;
 		Player.score += Convert.ToInt32(bullet.damage);
 
-		GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.damage, ForceMode.Impulse);
+		GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.force, ForceMode.Impulse);
 	}
 
 	public override void Randomize ()

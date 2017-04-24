@@ -8,22 +8,12 @@ public sealed class Health: BehaviorBase
 {
 	public float totalHealth = 100f;
 	public float currentHealth = 100f;
-	public float regenerationDuration = 15f; // 5 seconds to regenerate
+	public float regenerationRate = 5f; // 5 seconds to regenerate
 	public float criticalPercentage = 0.2f;
 	public float lowPercentage = 0.5f;
 	public bool dead = false;
     
-    void Awake()
-	{
-		enabled = false;
-	}
-
-	void OnEnable()
-	{
-		StartCoroutine(Regenerate());
-	}
-
-	void OnImpact(Bullet bullet)
+    void OnImpact(Bullet bullet)
 	{
 		currentHealth = Mathf.Clamp(currentHealth - bullet.damage, 0f, totalHealth);
 
@@ -31,6 +21,7 @@ public sealed class Health: BehaviorBase
 		var low = totalHealth * lowPercentage;
 		if (currentHealth == 0)
 		{
+			dead = true;
 			SendMessage("OnDeath", SendMessageOptions.RequireReceiver);
 		}
 		else if (currentHealth <= critical)
@@ -41,20 +32,21 @@ public sealed class Health: BehaviorBase
 		{
 			SendMessage("OnLowHealth", SendMessageOptions.RequireReceiver);
 		}
+
+
 	}
 
-	IEnumerator Regenerate()
+	void Update()
 	{
 		if (currentHealth == totalHealth)
-			yield break;
+			return;
 
-		var t = 1f/regenerationDuration;
-		currentHealth = Mathf.Clamp(currentHealth + (totalHealth * t), 0f, totalHealth); 
+		if (!dead)
+		{
+			var delta = regenerationRate * Time.deltaTime;
+			currentHealth = Mathf.Clamp(currentHealth + delta, 0f, totalHealth); 
+		}
 
-		if (currentHealth == totalHealth)
-			yield break;
-
-		yield return new WaitForSeconds(t);
 	}
 
 	public void Reset() 

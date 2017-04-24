@@ -1,14 +1,21 @@
-﻿<Properties StartupItem="LD38SmallWorld.Plugins.csproj" RefactoringSettings.EnableRefactorings="True">
+﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Projectiles/Gun.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AI/CharacterBase.cs">
     <Files>
       <File FileName="Assets/Mechanics/CharacterManager.cs" Line="108" Column="4" />
-      <File FileName="Assets/Projectiles/Gun.cs" Line="34" Column="22" />
+      <File FileName="Assets/Projectiles/Gun.cs" Line="17" Column="30" />
+      <File FileName="Assets/AI/Player.cs" Line="128" Column="3" />
+      <File FileName="Assets/AI/Health.cs" Line="41" Column="4" />
+      <File FileName="Assets/Projectiles/Impact.cs" Line="33" Column="16" />
+      <File FileName="Assets/AI/Thug.cs" Line="136" Column="77" />
+      <File FileName="Assets/AI/CharacterBase.cs" Line="68" Column="3" />
+      <File FileName="Assets/Projectiles/Holdster.cs" Line="9" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Mechanics/CharacterManager.cs" line="125" column="7" />
+      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/AI/Health.cs" line="28" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

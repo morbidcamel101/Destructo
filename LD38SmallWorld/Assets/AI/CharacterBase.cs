@@ -45,33 +45,36 @@ public abstract class CharacterBase: BehaviorBase
 		}
 	}
 
-	public void Fire()
+	public void Fire(string id = null)
 	{
-		foreach(var hold in holdsters)
-		{
-			hold.gun.Fire();
-		}
+		if (holdsters.Length == 0)
+			return;
+
+		var gun = id != null ? GetGun(id) : holdsters[0].gun;
+		gun.Fire();
 	}
 
-	public void StopFire()
+	public void StopFire(string id = null)
 	{
-		foreach(var hold in holdsters)
-		{
-			hold.gun.StopFire();
-		}
+		if (holdsters.Length == 0)
+			return;
+
+		var gun = id != null ? GetGun(id) : holdsters[0].gun;
+		gun.StopFire();
 	}
 
-	public void FireAt(Transform target)
+	public void FireAt(Transform target, string id = null)
 	{
-		FireAt(target.position);
+		FireAt(target.position, id);
 	}
 
-	public void FireAt(Vector3 position)
+	public void FireAt(Vector3 position, string id = null)
 	{
-		foreach(var hold in holdsters)
-		{
-			hold.gun.FireAt(position);
-		}
+		if (holdsters.Length == 0)
+			return;
+
+		var gun = id != null ? GetGun(id) : holdsters[0].gun;
+		gun.FireAt(position);
 	}
 
 	public Health Health { get { return this.GetComponent<Health>(); } }
