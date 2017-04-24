@@ -26,7 +26,8 @@ public class ButtonManager : MonoBehaviour
 
     private void SetScoreText()
     {
-        scoreText.text = string.Format("Score: {0}", GameStatsHolder.scoreTotal.ToString());
+        if (scoreText != null)
+            scoreText.text = string.Format("Score: {0}", GameStatsHolder.scoreTotal.ToString());
     }
 
     public void StartGameButton(string newGameLevel)
