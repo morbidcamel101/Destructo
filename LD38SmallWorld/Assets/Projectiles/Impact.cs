@@ -23,12 +23,13 @@ public class Impact: BehaviorBase
 			
 		// Kick off effect and recycle
 		var instance = Spawner.Spawn (effect.effect, true, position, rotation);
+		Spawner.Recycle (instance, duration);
 		var physics = instance.GetComponent<ExplosionPhysicsForce>();
 		if (physics)
 		{
 			physics.explosionForce = 0; // Don't let physics mess it up for now
 		}
-		Spawner.Recycle (instance, duration);
+
 	}
 
 	private void BulletImpact (Vector3 point, Vector3 normal, Bullet bullet)
@@ -45,7 +46,7 @@ public class Impact: BehaviorBase
 			{
 				// bullet was used
 				var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
-				SpawnEffect (impactEffect, point, Quaternion.Euler(normal), bullet.force * bullet.strengthMultiplier);
+				SpawnEffect (impactEffect, point, Quaternion.identity, bullet.force * bullet.strengthMultiplier);
 			}
 		}
 	}
