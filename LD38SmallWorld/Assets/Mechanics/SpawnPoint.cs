@@ -5,10 +5,11 @@ using System.Collections;
 [AddComponentMenu("Small World/Spawn Point")]
 public class SpawnPoint : BehaviorBase 
 {
-	
 	public float delay = 5;
-
+	public float checkDelay = 5f;
 	internal float resumeTime;
+
+	//private bool isReady = false;
 
 	public bool IsReady
 	{
@@ -22,4 +23,29 @@ public class SpawnPoint : BehaviorBase
 		resumeTime = Time.time + delay;
 
 	}
+
+	/*void Start()
+	{
+		isReady = false;
+	}
+
+	void Update()
+	{
+		if (Time.time < resumeTime)
+			return;
+
+		resumeTime = Time.time + checkDelay;
+
+		Ray ray = new Ray(transform.position, -transform.up);
+		if (!(isReady = Physics.Raycast(ray, 10f)))
+		{
+			Spawner.Recycle(gameObject,5f);
+		}
+	}
+
+	void OnTriggerStay(Collider other)
+	{
+		
+		isReady = other is TerrainCollider;;
+	}*/
 }

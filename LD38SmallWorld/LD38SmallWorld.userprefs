@@ -1,21 +1,23 @@
-﻿<Properties StartupItem="LD38SmallWorld.Plugins.csproj" RefactoringSettings.EnableRefactorings="True">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Projectiles/Gun.cs">
+﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Mechanics/TerrainManager.cs">
     <Files>
-      <File FileName="Assets/Mechanics/CharacterManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Projectiles/Gun.cs" Line="46" Column="6" />
-      <File FileName="Assets/AI/Player.cs" Line="1" Column="1" />
+      <File FileName="Assets/Mechanics/CharacterManager.cs" Line="73" Column="5" />
+      <File FileName="Assets/Projectiles/Gun.cs" Line="142" Column="3" />
+      <File FileName="Assets/AI/Player.cs" Line="78" Column="15" />
       <File FileName="Assets/AI/Health.cs" Line="1" Column="1" />
       <File FileName="Assets/Projectiles/Impact.cs" Line="1" Column="1" />
       <File FileName="Assets/AI/Thug.cs" Line="1" Column="1" />
       <File FileName="Assets/AI/CharacterBase.cs" Line="1" Column="1" />
       <File FileName="Assets/Projectiles/Holdster.cs" Line="1" Column="1" />
       <File FileName="Assets/HUD/HealthMeterManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Mechanics/TerrainManager.cs" Line="6" Column="47" />
+      <File FileName="Assets/Core/Extensions.cs" Line="24" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Mechanics/CharacterManager.cs" line="125" column="7" />
+      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Mechanics/CharacterManager.cs" line="186" column="7" />
       <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/AI/Health.cs" line="18" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

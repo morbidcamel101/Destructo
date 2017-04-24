@@ -11,7 +11,7 @@ using UnityEngine.AI;
 [AddComponentMenu("Small World/Character Manager")]
 public sealed class CharacterManager : BehaviorBase
 {
-	public enum State { Initializing, WaitingForDrop, Monitoring, Spawn };
+	public enum State { Initializing, WaitingForDrop, CheckingSpawnPoints, Monitoring, Spawn };
 	public State state;
 	public float statusInterval = 1f;
 	public CharacterDefinition[] characters;
@@ -20,7 +20,7 @@ public sealed class CharacterManager : BehaviorBase
 	public int spawnPointCount = 20;
 	public float dropHeight = 20;
 	public int maxRetries = 1000;
-	public TerainManager terrain;
+	public Transform terrain;
 	public float dropWaitTime = 15f;
 	public float spawnDelay = 15f;
 	// Controls difficulty
@@ -73,8 +73,25 @@ public sealed class CharacterManager : BehaviorBase
 				if (Time.time < resumeTime)
 					break;
 
+				state = State.CheckingSpawnPoints;
+				break;
+
+			case State.CheckingSpawnPoints:
+				if (Time.time < resumeTime)
+					break;
+
+				resumeTime = Time.time + 1;
+				spawnPoints = GetComponentsInChildren<SpawnPoint>();
+				foreach(var spawnPoint in spawnPoints)
+				{
+					if (!spawnPoint.IsReady)
+					{
+						return;
+					}	
+				}
 				state = State.Monitoring;
 				break;
+
 			case State.Monitoring:
 				if (spawned.Count < activePopulation)
 				{
@@ -112,7 +129,7 @@ public sealed class CharacterManager : BehaviorBase
 			if (retries >= maxRetries)
 				continue;
 
-			var pos = this.terrain.transform.position + hit.position + (this.terrain.transform.up * dropHeight);
+			var pos = this.terrain.position + hit.position + (this.terrain.up * dropHeight);
 			var obj = Spawner.Spawn(spawnPointPrefab, false, pos, Quaternion.identity);
 			spawns.Add(obj.GetComponent<SpawnPoint>());
 			obj.transform.parent = this.transform;

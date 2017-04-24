@@ -16,6 +16,7 @@ public class Player: CharacterBase
 	public float smoothing = 5f;
 	public float zoom = 20f;
 	public float normal = 60f;
+	public bool isZooming;
 
 	void Awake()
 	{
@@ -45,6 +46,8 @@ public class Player: CharacterBase
 		{
 			Fire("rocket");
 		}
+
+
 	}
 
 	void FixedUpdate()
@@ -64,6 +67,21 @@ public class Player: CharacterBase
 
 	private void UpdateGuns()
 	{
+		if (Input.GetButtonDown("Fire3"))
+		{
+			isZooming = true;
+		}
+
+		if (Input.GetButtonUp("Fire3"))
+		{
+			isZooming = false;
+		}
+
+		if (isZooming)
+			PerformZoom();
+		else
+			PerformUnzoom();
+		/*
 		foreach(var hold in holdsters)
 		{
 			switch(hold.gun.state)
@@ -84,7 +102,7 @@ public class Player: CharacterBase
 					PerformUnzoom();
 					break;
 			}
-		}
+		}*/
 
 	}
 
