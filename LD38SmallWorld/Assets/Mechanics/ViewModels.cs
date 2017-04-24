@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+public enum Difficulty { Easy, Normal, Extreme }
+
 [Serializable]
 public sealed class CharacterDefinition
 {

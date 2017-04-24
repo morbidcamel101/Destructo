@@ -27,8 +27,8 @@ public sealed class CharacterManager : BehaviorBase
 	public float spawnInterval = 10f;
 	public int population = 100;
 	public int activePopulation = 20;
+	public float minStrengthMultiplier = 1f;
 	public float maxStrengthMultiplier = 10f;
-
 
 
 	internal SpawnPoint[] spawnPoints;
@@ -65,6 +65,9 @@ public sealed class CharacterManager : BehaviorBase
 					Debug.LogError("There are now spawn points defined!");
 					enabled = false;
 				}
+
+				SetDifficulty();
+
 				resumeTime = Time.time + dropWaitTime; 
 				state = State.WaitingForDrop;
 				break;
@@ -135,6 +138,25 @@ public sealed class CharacterManager : BehaviorBase
 		{
 			Debug.LogError("There are now spawn points defined!");
 			enabled = false;
+		}
+	}
+
+	private void SetDifficulty()
+	{
+		switch(Difficulty)
+		{
+			case Difficulty.Easy:
+			minStrengthMultiplier = 1f;
+			maxStrengthMultiplier = 3f;
+			break;
+			case Difficulty.Normal:
+			minStrengthMultiplier = 1f;
+			maxStrengthMultiplier = 5f;
+			break;
+			case Difficulty.Extreme:
+			minStrengthMultiplier = 5f;
+			maxStrengthMultiplier = 10f;
+			break;
 		}
 	}
 
@@ -222,7 +244,7 @@ public sealed class CharacterManager : BehaviorBase
 			if (thug != null)
 			{
 				thug.strengthMultiplier = (UnityEngine.Random.value * character.strengthMultiplier);
-				thug.strengthMultiplier *= this.maxStrengthMultiplier;
+				thug.strengthMultiplier *= UnityEngine.Random.Range(this.minStrengthMultiplier, this.maxStrengthMultiplier);
 			}
 			spawn.Randomize();
 
@@ -237,6 +259,9 @@ public sealed class CharacterManager : BehaviorBase
 		Spawner.Recycle(obj);
 		this.spawned.Remove(obj);
 	}
+
+
+	public static Difficulty Difficulty {get; set;}
 
 
 }
