@@ -20,10 +20,16 @@ public class ButtonManager : MonoBehaviour
         SceneManager.LoadScene(loadGameLevel);
     }
 
-    public void CreditsButton(string loadGameLevel)
+    public void CreditsButton()
     {
         // Dev Team Credits Page
         SceneManager.LoadScene("Credits");
+    }
+
+    public void DevelopedByButton()
+    {
+        // Dev Team Website
+        // TODO: Link to dev team
     }
 
     public void ControlsButton()
@@ -39,5 +45,11 @@ public class ButtonManager : MonoBehaviour
     public void ExitGameButton()
     {
         Application.Quit();
+    }
+
+    public void BackButton()
+    {
+        // Return to previous screen
+        SceneManager.LoadScene("MainMenu");
     }
 }
