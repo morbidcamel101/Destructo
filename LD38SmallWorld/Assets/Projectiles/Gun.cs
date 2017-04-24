@@ -16,6 +16,7 @@ public class Gun : BehaviorBase
 	public float range = 10000;
 	public Transform gunChamber;
 	public float reactionSpeed = 1f;
+
     public AudioClip shootSound;
 
 	private Bullet currentBullet = null;
@@ -187,7 +188,6 @@ public class Gun : BehaviorBase
 		this.target = target;
 
 		return Fire();
-		
 	}
 
 	public bool Fire()
