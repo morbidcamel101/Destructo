@@ -33,6 +33,21 @@ public class ButtonManager : MonoBehaviour
     public void StartGameButton(string newGameLevel)
     {
         PlayButtonSelect();
+        CharacterManager.Difficulty = Difficulty.Easy;
+        SceneManager.LoadScene(newGameLevel);
+    }
+
+    public void NormalGameButton(string newGameLevel)
+    {
+        PlayButtonSelect();
+        CharacterManager.Difficulty = Difficulty.Normal;
+        SceneManager.LoadScene(newGameLevel);
+    }
+
+    public void ExtremeGameButton(string newGameLevel)
+    {
+        PlayButtonSelect();
+        CharacterManager.Difficulty = Difficulty.Extreme;
         SceneManager.LoadScene(newGameLevel);
     }
 
