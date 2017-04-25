@@ -1,10 +1,15 @@
-# THE BRIEF
+# Destructo Island
+Created in 72 hours using Unity as part of the Ludum Dare #38 Game Jame
+Origin compo entry - https://ldjam.com/events/ludum-dare/38/$27177
+
+
+## THE BRIEF
 
 Captain Destructo has his own private island. A small world full of combat drones. The captain’s weapon of choice is a weapon called the MOAG with powerful nuclear capabilities. The nuclear rocket attachment is especially effective at taking out multiple enemies at once. The scope is a must use accessory and the captain executes his kills with precision.
 
 Captain Destructo has never been killed until now….
 
-# THE TEAM
+## THE TEAM
 
 MorbidCamel - Cayman Islands MrKenzo - California
 
@@ -16,14 +21,14 @@ We are very pleased with the result although with a little bit more time we coul
 
 Built in 72 hours using Unity.
 
-# THE GAME
+## THE GAME
 
 Available for MacOs, Windows
 
 Binaries and full source code: github.com/JohanOtto/Destructo/releases
 Full commit history: https://www.tribalmind.co/Journey/ludum-dare-38-morbidcamel
 
-# THE JOURNEY
+## THE JOURNEY
 
 MorbidCamel Twitch Channel: www.twitch.tv/morbidcamel101 
 MrKenz0 Twitch Channel: www.twitch.tv/mrkenz0
