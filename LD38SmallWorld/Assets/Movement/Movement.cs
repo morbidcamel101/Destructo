@@ -24,6 +24,7 @@ public abstract class MovementMotorBase : BehaviorBase
 	// TODO
 	public virtual void MoveTo(ITarget target)
 	{
+		enabled = true;
 		Target = target;
 		state = State.Move;
 	}

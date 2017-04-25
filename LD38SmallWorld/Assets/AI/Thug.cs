@@ -15,12 +15,14 @@ public class Thug : CharacterBase
 	public float alertness = 0.5f;
 	public State state;
 	public float decisionDelay = 10f;
+	public float minInspectionDelay = 5f;
+	public float maxInspectionDelay = 15f;
 	public SphereCollider detection;
 	public float detectionRadius { get { return detection.radius; } }
 	private MovementMotorBase movement;
 	private CharacterBase currentTarget;
 	private float resumeTime;
-	public float inspectTime;
+	private float inspectTime;
 	public Prototype smokePrefab;
 	internal int points = 100;
 	private Collider bodyCollider;
@@ -44,14 +46,14 @@ public class Thug : CharacterBase
 
 	void Update()
 	{
+		var factor = 1f/alertness;
 		switch(state)
 		{
 			case State.Seeking:
 			if (Time.time < resumeTime)
 				return;
 
-			UpdateNav(); 
-			resumeTime = Time.time + alertness;
+			resumeTime = Time.time + decisionDelay * factor;
 
 			if (currentTarget != null)
 			{
@@ -71,14 +73,14 @@ public class Thug : CharacterBase
 			break;
 
 			case State.Inspect:
-			var target = CharacterManager.Instance.GetRandomPosition(transform.position, UnityEngine.Random.value * 50f);
+			var target = CharacterManager.Instance.GetRandomPosition(transform.position, UnityEngine.Random.value * detectionRadius);
 			if (target == null)
 			{
 				state = State.Seeking;
 				break;
 			}
 			movement.MoveTo(new StaticTarget(target.Value, (target.Value - transform.position).normalized));
-			inspectTime = Time.time + inspectTime;
+			inspectTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * factor;
 			state = State.Seeking;
 			break;
 
@@ -112,8 +114,6 @@ public class Thug : CharacterBase
 	private bool LockOn()
 	{
 		var player = Player;
-		// TODO - Raycast towards the player if we have a currentTarget - see if he is in line of site
-
 
 		Ray ray = new Ray(transform.position, (player.transform.position - transform.position).normalized);
 		RaycastHit hit;
@@ -173,9 +173,12 @@ public class Thug : CharacterBase
 
 	public override void Randomize ()
 	{
-		this.strengthMultiplier = UnityEngine.Random.Range(1f, CharacterManager.Instance.maxStrengthMultiplier);
 		this.Health.totalHealth = 100 * strengthMultiplier;
 		this.Health.Reset();
+
+		alertness *= strengthMultiplier;
+		detection.radius *= strengthMultiplier;
+
 		for(int i = 0; i < holdsters.Length; i++)
 		{
 			holdsters[i].gun.strengthMultiplier = this.strengthMultiplier;
@@ -183,15 +186,6 @@ public class Thug : CharacterBase
 
 		}
 		base.Randomize ();
-	}
-
-	internal void UpdateNav()
-	{
-		var agent = GetComponent<NavMeshAgent>();
-		if (agent != null && !agent.enabled)
-		{
-			agent.enabled = true;
-		}
 	}
 }
 

@@ -47,8 +47,9 @@ public class Gun : BehaviorBase
 
     public void Reset()
     {
-    	reactionSpeed = reactionSpeed / strengthMultiplier;
-    	fireRate = fireRate / strengthMultiplier;
+    	// LD38 BUG FIXED - I divided!?!?
+    	reactionSpeed = reactionSpeed * strengthMultiplier;
+    	fireRate = fireRate * strengthMultiplier;
     }
 
     // Update is called once per frame

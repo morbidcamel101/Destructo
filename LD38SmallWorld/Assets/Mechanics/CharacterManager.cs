@@ -29,6 +29,7 @@ public sealed class CharacterManager : BehaviorBase
 	public int activePopulation = 20;
 	public float minStrengthMultiplier = 1f;
 	public float maxStrengthMultiplier = 10f;
+	public float maxNavClearance = 4f;
 
 
 	internal SpawnPoint[] spawnPoints;
@@ -167,7 +168,8 @@ public sealed class CharacterManager : BehaviorBase
 		var retries = 0;
 		do 
 		{
-			randomDirection = Random.insideUnitSphere.normalized; // not sure
+			var r = UnityEngine.Random.value * distance;
+			randomDirection = Random.insideUnitSphere.normalized * r; // not sure
 			randomDirection += pos;
 	 	}
 		while (++retries < maxRetries && !NavMesh.SamplePosition(randomDirection, out hit, distance, 1));

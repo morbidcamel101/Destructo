@@ -1,30 +1,31 @@
-﻿<Properties StartupItem="LD38SmallWorld.Plugins.csproj" RefactoringSettings.EnableRefactorings="True">
+﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Mechanics/CharacterManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Movement/NavMeshMovement.cs">
     <Files>
-      <File FileName="Assets/Mechanics/CharacterManager.cs" Line="264" Column="1" />
-      <File FileName="Assets/Projectiles/Gun.cs" Line="76" Column="31" />
-      <File FileName="Assets/AI/Player.cs" Line="155" Column="17" />
-      <File FileName="Assets/Projectiles/Impact.cs" Line="36" Column="3" />
-      <File FileName="Assets/AI/Thug.cs" Line="165" Column="2" />
-      <File FileName="Assets/AI/CharacterBase.cs" Line="26" Column="3" />
+      <File FileName="Assets/Mechanics/CharacterManager.cs" Line="171" Column="47" />
+      <File FileName="Assets/Projectiles/Gun.cs" Line="66" Column="10" />
+      <File FileName="Assets/AI/Player.cs" Line="1" Column="1" />
+      <File FileName="Assets/Projectiles/Impact.cs" Line="1" Column="1" />
+      <File FileName="Assets/AI/Thug.cs" Line="116" Column="3" />
+      <File FileName="Assets/AI/CharacterBase.cs" Line="1" Column="1" />
       <File FileName="Assets/Projectiles/Holdster.cs" Line="1" Column="1" />
       <File FileName="Assets/HUD/HealthMeterManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Mechanics/TerrainManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Core/Extensions.cs" Line="1" Column="1" />
       <File FileName="Assets/Mechanics/MaterialImpactManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Mechanics/SpawnPoint.cs" Line="51" Column="50" />
+      <File FileName="Assets/Mechanics/SpawnPoint.cs" Line="1" Column="1" />
       <File FileName="Assets/Utilities/Trash.cs" Line="1" Column="1" />
-      <File FileName="Assets/Utilities/Spawner.cs" Line="220" Column="4" />
-      <File FileName="Assets/Utilities/NoGoZone.cs" Line="14" Column="39" />
-      <File FileName="Assets/AI/Health.cs" Line="44" Column="17" />
-      <File FileName="Assets/Standard Assets/ParticleSystems/Scripts/ExplosionPhysicsForce.cs" Line="8" Column="39" />
-      <File FileName="Assets/Projectiles/Bullet.cs" Line="45" Column="23" />
+      <File FileName="Assets/Utilities/Spawner.cs" Line="1" Column="1" />
+      <File FileName="Assets/Utilities/NoGoZone.cs" Line="1" Column="1" />
+      <File FileName="Assets/AI/Health.cs" Line="1" Column="1" />
+      <File FileName="Assets/Standard Assets/ParticleSystems/Scripts/ExplosionPhysicsForce.cs" Line="1" Column="1" />
+      <File FileName="Assets/Projectiles/Bullet.cs" Line="1" Column="1" />
+      <File FileName="Assets/Movement/NavMeshMovement.cs" Line="17" Column="28" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Mechanics/CharacterManager.cs" line="165" column="1" />
+      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Mechanics/CharacterManager.cs" line="166" column="1" />
       <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Projectiles/Impact.cs" line="49" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

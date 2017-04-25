@@ -7,28 +7,48 @@ using UnityEngine.AI;
 public sealed class NavMeshMovement: MovementMotorBase
 {
 	private NavMeshAgent agent;
+	public bool agentActive;
 
 	void Awake()
 	{
 		if (agent == null)
 			agent = GetComponent<NavMeshAgent>();
-
+		
 		Ensure(agent);
+		agent.speed = this.speed;
 	}
 
 	void FixedUpdate()
 	{
 		if (Target == null)
+		{
+			enabled = false;
 			return;
+		}
 
-		this.transform.position =  Vector3.Slerp(this.transform.position, this.transform.position + (Target.GetDirection(transform.position) * speed), Time.deltaTime);
+		Debug.DrawLine(this.transform.position, agent.nextPosition, Color.yellow);
+		if (agentActive)
+		{
+			this.transform.position =  Vector3.Lerp(this.transform.position, agent.nextPosition, Time.deltaTime*speed);	
+		}
+		else
+		{
+			// LD38 Code
+			this.transform.position =  Vector3.Slerp(this.transform.position, this.transform.position + (Target.GetDirection(transform.position) * speed), Time.deltaTime);
+
+		}
 		// TODO - Rotation
 	}
 
 	public override void MoveTo (ITarget target)
 	{
+		
 		base.MoveTo (target);
-		this.agent.SetDestination(target.Position);
+		agentActive = this.agent.isOnNavMesh;
+		if (agentActive)
+		{
+			this.agent.SetDestination(target.Position);
+		}
 	}
 }
 
