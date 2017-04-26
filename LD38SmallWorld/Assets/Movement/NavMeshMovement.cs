@@ -25,8 +25,6 @@ public sealed class NavMeshMovement: MovementMotorBase
 			enabled = false;
 			return;
 		}
-
-		Debug.DrawLine(this.transform.position, agent.nextPosition, Color.yellow);
 		if (agentActive)
 		{
 			this.transform.position =  Vector3.Slerp(this.transform.position, agent.nextPosition, Time.deltaTime*speed);	
