@@ -88,10 +88,8 @@ public sealed class CharacterManager : BehaviorBase
 				spawnPoints = GetComponentsInChildren<SpawnPoint>();
 				foreach(var spawnPoint in spawnPoints)
 				{
-					if (!spawnPoint.IsReady)
-					{
-						return;
-					}
+					spawnPoint.disabled = spawnPoint.transform.position.y < 0; // Sometimes spawn points can drop through the terrain?!?
+
 				}
 				foreach(var spawn in spawnPoints)
 				{

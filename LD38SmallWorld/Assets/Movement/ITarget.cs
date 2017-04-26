@@ -12,6 +12,8 @@ public interface ITarget
 
 	float GetDistance(Vector3 source);
 
+	float GetDistanceSqr(Vector3 source);
+
 	Vector3 GetDirection(Vector3 source);
 
 }

@@ -26,11 +26,13 @@ public class Thug : CharacterBase
 	public Prototype smokePrefab;
 	internal int points = 100;
 	private Collider bodyCollider;
+	private float alertnessFactor = 0f;
 
 
 	void Awake()
 	{
 		// use the strength multiplier
+		alertnessFactor = 1f/alertness;
 		Health.totalHealth *= strengthMultiplier;
 		Health.currentHealth *= strengthMultiplier;
 		//Health.regenerationDuration *= strengthMultiplier; 
@@ -41,19 +43,21 @@ public class Thug : CharacterBase
 		Ensure(detection);
 		Ensure(movement);
 		this.Assert(detection.isTrigger, "The detection sphere must be a trigger!");
+		inspectTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertness;
 		state = State.Seeking;
+
 	}
 
 	void Update()
 	{
-		var factor = 1f/alertness;
+		
 		switch(state)
 		{
 			case State.Seeking:
 			if (Time.time < resumeTime)
 				return;
 
-			resumeTime = Time.time + decisionDelay * factor;
+			resumeTime = Time.time + decisionDelay * alertnessFactor;
 
 			if (currentTarget != null)
 			{
@@ -73,6 +77,7 @@ public class Thug : CharacterBase
 			break;
 
 			case State.Inspect:
+			Log("{0} Inspecting", this.gameObject);
 			var target = CharacterManager.Instance.GetRandomPosition(transform.position, UnityEngine.Random.value * detectionRadius);
 			if (target == null)
 			{
@@ -80,7 +85,7 @@ public class Thug : CharacterBase
 				break;
 			}
 			movement.MoveTo(new StaticTarget(target.Value, (target.Value - transform.position).normalized));
-			inspectTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * factor;
+			inspectTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertnessFactor;
 			state = State.Seeking;
 			break;
 
@@ -167,6 +172,7 @@ public class Thug : CharacterBase
 	{
 		currentTarget = bullet.sender;
 		Player.score += Convert.ToInt32(bullet.damage);
+		state = State.Inspect; // Move out the way
 
 		//GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.force, ForceMode.Impulse);
 	}

@@ -8,6 +8,8 @@ public sealed class NavMeshMovement: MovementMotorBase
 {
 	private NavMeshAgent agent;
 	public bool agentActive;
+	public float targetRange = 0.5f;
+	public float navAgentMinDistance = 10f;
 
 
 	void Awake()
@@ -36,12 +38,24 @@ public sealed class NavMeshMovement: MovementMotorBase
 
 		}
 		// TODO - Rotation
+		if (Target is StaticTarget 
+			&& Target.GetDistanceSqr(this.transform.position) <= targetRange*targetRange)
+		{
+			enabled = false;
+		}
 	}
 
 	public override void MoveTo (ITarget target)
 	{
 		
 		base.MoveTo (target);
+
+		if (target.GetDistanceSqr(transform.position) < navAgentMinDistance * navAgentMinDistance)
+		{
+			agentActive = false;
+			return;
+		}
+
 		agentActive = this.agent.isOnNavMesh;
 		agent.speed = this.speed;
 		if (agentActive)

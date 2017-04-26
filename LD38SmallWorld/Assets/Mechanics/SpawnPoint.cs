@@ -10,13 +10,14 @@ public class SpawnPoint : BehaviorBase
 	public float checkDelay = 5f;
 	internal float resumeTime;
 	public Vector3 offset = new Vector3(1f, 0.2f);
+	public bool disabled = true;
 
 	//private bool isReady = false;
 
 	public bool IsReady
 	{
 		get {
-			return Time.time > resumeTime;
+			return Time.time > resumeTime && !disabled;
 		}
 	}
 
@@ -44,7 +45,7 @@ public class SpawnPoint : BehaviorBase
 		if (rigid)
 			Destroy(rigid);
 
-		var sphere = GetComponent<SphereCollider>();
+		var sphere = gameObject.GetComponent<SphereCollider>();
 		if (sphere)
 			Destroy(sphere);
 
