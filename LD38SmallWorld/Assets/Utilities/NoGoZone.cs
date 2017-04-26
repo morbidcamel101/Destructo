@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+// Why the thugs dissapear. better this way. rip
 [AddComponentMenu("Small World/No Go Zone")]
 public class NoGoZone : BehaviorBase
 {
