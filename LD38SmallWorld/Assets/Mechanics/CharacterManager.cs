@@ -161,6 +161,7 @@ public sealed class CharacterManager : BehaviorBase
 		}
 	}
 
+	// Should be in terrain manager
 	public Vector3? GetRandomPosition(Vector3 pos, float distance)
 	{
 		NavMeshHit hit = default(NavMeshHit);
@@ -245,7 +246,7 @@ public sealed class CharacterManager : BehaviorBase
 			Thug thug = spawn as Thug;
 			if (thug != null)
 			{
-				thug.strengthMultiplier = (UnityEngine.Random.value * character.strengthMultiplier);
+				thug.strengthMultiplier = character.strengthMultiplier;
 				thug.strengthMultiplier *= UnityEngine.Random.Range(this.minStrengthMultiplier, this.maxStrengthMultiplier);
 			}
 			spawn.Randomize();

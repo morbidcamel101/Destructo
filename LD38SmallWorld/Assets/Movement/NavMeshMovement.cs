@@ -20,8 +20,6 @@ public sealed class NavMeshMovement: MovementMotorBase
 
 	void FixedUpdate()
 	{
-		agent.speed = this.speed;
-
 		if (Target == null)
 		{
 			enabled = false;
@@ -47,6 +45,7 @@ public sealed class NavMeshMovement: MovementMotorBase
 		
 		base.MoveTo (target);
 		agentActive = this.agent.isOnNavMesh;
+		agent.speed = this.speed;
 		if (agentActive)
 		{
 			this.agent.SetDestination(target.Position);
