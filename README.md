@@ -1,6 +1,7 @@
 # Destructo Island
-Created in 72 hours using Unity as part of the Ludum Dare #38 Game Jame
-Origin compo entry - https://ldjam.com/events/ludum-dare/38/$27177
+Created in 72 hours using Unity as part of the Ludum Dare #38 Game Jam entry - 
+
+https://ldjam.com/events/ludum-dare/38/$27177
 
 
 ## THE BRIEF
