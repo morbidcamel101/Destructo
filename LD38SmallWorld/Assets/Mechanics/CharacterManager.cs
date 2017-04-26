@@ -59,7 +59,7 @@ public sealed class CharacterManager : BehaviorBase
 		switch(state)
 		{
 			case State.Initializing:
-				//GenerateSpawnPoints();  --> Re-enable this - CHALLENGE!!
+				//GenerateSpawnPoints();  //--> Re-enable this - CHALLENGE!!
 				spawnPoints = GetComponentsInChildren<SpawnPoint>();
 				if (spawnPoints.Length == 0)
 				{
@@ -155,8 +155,8 @@ public sealed class CharacterManager : BehaviorBase
 			maxStrengthMultiplier = 5f;
 			break;
 			case Difficulty.Extreme:
-			minStrengthMultiplier = 5f;
-			maxStrengthMultiplier = 10f;
+			minStrengthMultiplier = 10f;
+			maxStrengthMultiplier = 30f;
 			break;
 		}
 	}

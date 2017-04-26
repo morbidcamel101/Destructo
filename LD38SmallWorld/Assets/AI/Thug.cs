@@ -178,6 +178,7 @@ public class Thug : CharacterBase
 
 		alertness *= strengthMultiplier;
 		detection.radius *= strengthMultiplier;
+		movement.speed *= strengthMultiplier;
 
 		for(int i = 0; i < holdsters.Length; i++)
 		{

@@ -9,17 +9,19 @@ public sealed class NavMeshMovement: MovementMotorBase
 	private NavMeshAgent agent;
 	public bool agentActive;
 
+
 	void Awake()
 	{
 		if (agent == null)
 			agent = GetComponent<NavMeshAgent>();
 		
 		Ensure(agent);
-		agent.speed = this.speed;
 	}
 
 	void FixedUpdate()
 	{
+		agent.speed = this.speed;
+
 		if (Target == null)
 		{
 			enabled = false;
@@ -29,7 +31,7 @@ public sealed class NavMeshMovement: MovementMotorBase
 		Debug.DrawLine(this.transform.position, agent.nextPosition, Color.yellow);
 		if (agentActive)
 		{
-			this.transform.position =  Vector3.Lerp(this.transform.position, agent.nextPosition, Time.deltaTime*speed);	
+			this.transform.position =  Vector3.Slerp(this.transform.position, agent.nextPosition, Time.deltaTime*speed);	
 		}
 		else
 		{
