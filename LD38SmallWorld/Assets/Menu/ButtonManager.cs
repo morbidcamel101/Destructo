@@ -76,7 +76,7 @@ public class ButtonManager : MonoBehaviour
         PlayButtonSelect();
 
         // Dev Team Website
-        // TODO: Link to dev team
+        Application.OpenURL("https://ldjam.com/events/ludum-dare/38/destructo-island");
     }
 
     public void ControlsButton()

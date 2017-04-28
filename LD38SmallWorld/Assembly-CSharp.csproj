@@ -66,6 +66,7 @@
      <Compile Include="Assets\Mechanics\ViewModels.cs" />
      <Compile Include="Assets\Menu\ButtonManager.cs" />
      <Compile Include="Assets\Menu\GameStatsHolder.cs" />
+     <Compile Include="Assets\Menu\MenuManager.cs" />
      <Compile Include="Assets\Movement\DynamicTarget.cs" />
      <Compile Include="Assets\Movement\ITarget.cs" />
      <Compile Include="Assets\Movement\Movement.cs" />

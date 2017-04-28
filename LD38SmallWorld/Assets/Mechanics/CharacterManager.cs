@@ -122,9 +122,32 @@ public sealed class CharacterManager : BehaviorBase
 				state = State.Monitoring;
 				break;
 		}
-	}
+        
+        /*
+        // Test
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            // Kill
+            population = population - 50;
 
-	private void GenerateSpawnPoints()
+            if (this.population <= 0)
+            {
+                //UnityEngine.SceneManagement.SceneManager.LoadScene("GameCompleted");
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            // Spawn
+            population = population + 50;
+        }
+
+        // Instant Game Over
+        if (Input.GetKeyDown(KeyCode.X))
+            UnityEngine.SceneManagement.SceneManager.LoadScene("GameOver");
+        */
+    }
+
+    private void GenerateSpawnPoints()
 	{
 		// MorbidCamel - Couldn't get this to work, created them manually
 		List<SpawnPoint> spawns = new List<SpawnPoint>();

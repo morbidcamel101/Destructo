@@ -32,6 +32,7 @@ public class ScoreMeterManager : UIBehavior
 
     public Text droneText;
     public Text scoreText;
+    public Image waveCompletedImage;
 
     #endregion
 
@@ -55,6 +56,20 @@ public class ScoreMeterManager : UIBehavior
     {
         if (droneText != null)
             droneText.text = string.Format("DRONES: {0}", Convert.ToInt32(droneCount));
+
+        if (waveCompletedImage != null)
+        {
+            if (droneCount <= 0)
+            {
+                // Display wave completed
+                waveCompletedImage.enabled = true;
+            }
+            else
+            {
+                // Next wave has started
+                waveCompletedImage.enabled = false;
+            }
+        }
     }
 
     private void SetScoreText()
