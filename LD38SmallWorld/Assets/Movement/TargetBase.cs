@@ -7,19 +7,28 @@ public abstract class TargetBase: ITarget
 	public abstract Vector3 Position { get; }
 	public abstract Vector3 Direction {get; }
 
-	public float GetDistanceSqr(Vector3 target)
+	public abstract bool IsReady {get;}
+
+	public float GetDistanceSqr(Vector3 source)
 	{
-		return (target - Position).sqrMagnitude;
+		return (Position - source).sqrMagnitude;
 	}
 
-	public float GetDistance(Vector3 target)
+	public float GetDistance(Vector3 source)
 	{
-		return (target - Position).magnitude;
+		return (Position - source).magnitude;
 	}
 
 	public Vector3 GetDirection(Vector3 source)
 	{
 		return (Position - source).normalized;
 	}
+
+	public virtual bool InRange(Vector3 source, float range)
+	{
+		return (Position - source).sqrMagnitude < (range * range);
+	}
+
+
 }
 

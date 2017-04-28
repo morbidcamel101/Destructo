@@ -21,5 +21,9 @@ public sealed class StaticTarget: TargetBase
 	{
 		get { return direction; }
 	}
+
+	public override bool IsReady {
+		get { return Position != Vector3.zero; }
+	}
 }
 

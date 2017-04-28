@@ -29,6 +29,10 @@ public abstract class MovementMotorBase : BehaviorBase
 		state = State.Move;
 	}
 
+	public virtual void ResolvePath()
+	{
+	}
+
 
 }
 

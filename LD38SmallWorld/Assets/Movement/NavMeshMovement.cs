@@ -1,45 +1,41 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 [AddComponentMenu("Small World/Nav Mesh Movement")]
 [RequireComponent(typeof(NavMeshAgent))]
 public sealed class NavMeshMovement: MovementMotorBase
 {
-	private NavMeshAgent agent;
+	internal NavMeshAgent agent;
+	private float distanceSqr;
 	public bool agentActive;
 	public float targetRange = 0.5f;
 	public float navAgentMinDistance = 10f;
-
 
 	void Awake()
 	{
 		if (agent == null)
 			agent = GetComponent<NavMeshAgent>();
-		
+
 		Ensure(agent);
 	}
 
+
+
 	void FixedUpdate()
 	{
-		if (Target == null)
+		if (Target == null || !Target.IsReady)
 		{
 			enabled = false;
 			return;
 		}
-		if (agentActive)
-		{
-			this.transform.position =  Vector3.Slerp(this.transform.position, agent.nextPosition, Time.deltaTime*speed);	
-		}
-		else
-		{
-			// LD38 Code
-			this.transform.position =  Vector3.Slerp(this.transform.position, this.transform.position + (Target.GetDirection(transform.position) * speed), Time.deltaTime);
 
-		}
+		// LD38 Code
+		this.transform.position =  Vector3.Lerp(this.transform.position, this.transform.position + (Target.GetDirection(transform.position) * speed), Time.deltaTime);
+
 		// TODO - Rotation
-		if (Target is StaticTarget 
-			&& Target.GetDistanceSqr(this.transform.position) <= targetRange*targetRange)
+		if (Target.InRange(transform.position, targetRange))
 		{
 			enabled = false;
 		}
@@ -56,11 +52,26 @@ public sealed class NavMeshMovement: MovementMotorBase
 			return;
 		}
 
+		if (agentActive = this.agent.isOnNavMesh)
+		{
+			agent.ResetPath();
+			CharacterManager.Instance.QueueResolve(this);
+		}
+	}
+
+	public override void ResolvePath ()
+	{
+		base.ResolvePath ();
+
 		agentActive = this.agent.isOnNavMesh;
 		agent.speed = this.speed;
 		if (agentActive)
 		{
-			this.agent.SetDestination(target.Position);
+			this.agent.SetDestination(Target.Position);
+			this.agent.updatePosition = false;
+			this.agent.isStopped = false;
+
+			this.Target = new NavTarget(this); // Locked on - cansas city shuffle
 		}
 	}
 }

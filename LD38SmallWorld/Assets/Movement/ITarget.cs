@@ -16,5 +16,10 @@ public interface ITarget
 
 	Vector3 GetDirection(Vector3 source);
 
+	bool InRange(Vector3 source, float range);
+
+	bool IsReady {get; }
+
+
 }
 

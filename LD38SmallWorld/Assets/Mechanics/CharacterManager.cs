@@ -11,7 +11,7 @@ using UnityEngine.AI;
 [AddComponentMenu("Small World/Character Manager")]
 public sealed class CharacterManager : BehaviorBase
 {
-	public enum State { Initializing, WaitingForDrop, CheckingSpawnPoints, Monitoring, Spawn };
+	public enum State { Initializing, WaitingForDrop, CheckingSpawnPoints, Monitoring, Spawn, ResolvePath };
 	public State state;
 	public float statusInterval = 1f;
 	public CharacterDefinition[] characters;
@@ -34,6 +34,7 @@ public sealed class CharacterManager : BehaviorBase
 
 	internal SpawnPoint[] spawnPoints;
 	internal List<GameObject> spawned = new List<GameObject>();
+	private Queue<NavMeshMovement> pathQueue = new Queue<NavMeshMovement>();
 	private float resumeTime;
 
 	void Awake()
@@ -103,6 +104,16 @@ public sealed class CharacterManager : BehaviorBase
 				{
 					state = State.Spawn;
 				}
+				else if (pathQueue.Count > 0)
+				{
+					state = State.ResolvePath;
+				}
+				break;
+
+			case State.ResolvePath:
+				var movement = pathQueue.Dequeue();
+				movement.ResolvePath();
+				state = State.Monitoring;
 				break;
 
 			case State.Spawn:
@@ -237,7 +248,7 @@ public sealed class CharacterManager : BehaviorBase
 
 		var character = GetRandomCharacter();
 
-		var obj = Spawner.Spawn(character.character, false, spawnPoint.transform.position + spawnPoint.offset, Quaternion.identity);
+		var obj = Spawner.Spawn(character.character, false, spawnPoint.transform.position, Quaternion.identity);
 		var spawn = obj.GetComponent<CharacterBase>();
 		if (spawn != null)
 		{
@@ -245,9 +256,9 @@ public sealed class CharacterManager : BehaviorBase
 			if (thug != null)
 			{
 				thug.strengthMultiplier = character.strengthMultiplier;
-				thug.strengthMultiplier *= UnityEngine.Random.Range(this.minStrengthMultiplier, this.maxStrengthMultiplier);
+				thug.strengthMultiplier *= UnityEngine.Random.Range(this.minStrengthMultiplier, this.maxStrengthMultiplier) * spawnPoint.strengthMultiplier;
 			}
-			spawn.Randomize();
+			spawn.Ressurect();
 
 			spawned.Add(obj);
 		}
@@ -259,6 +270,11 @@ public sealed class CharacterManager : BehaviorBase
 	{
 		Spawner.Recycle(obj);
 		this.spawned.Remove(obj);
+	}
+
+	public void QueueResolve(NavMeshMovement movement)
+	{
+		this.pathQueue.Enqueue(movement);
 	}
 
 

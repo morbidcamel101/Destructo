@@ -17,8 +17,8 @@ public class Thug : CharacterBase
 	public float decisionDelay = 10f;
 	public float minInspectionDelay = 5f;
 	public float maxInspectionDelay = 15f;
-	public SphereCollider detection;
-	public float detectionRadius { get { return detection.radius; } }
+
+	public float detectionRadius = 100f;
 	private MovementMotorBase movement;
 	private CharacterBase currentTarget;
 	private float resumeTime;
@@ -27,6 +27,7 @@ public class Thug : CharacterBase
 	internal int points = 100;
 	private Collider bodyCollider;
 	private float alertnessFactor = 0f;
+	private Impact impact; 
 
 
 	void Awake()
@@ -39,10 +40,12 @@ public class Thug : CharacterBase
 		bodyCollider = this.GetComponent<Collider>();
 		if (movement == null)
 			movement = GetComponent<MovementMotorBase>();
+		impact = GetComponent<Impact>();
 		Ensure(bodyCollider.material); // Make sure we can get the impact effect!
-		Ensure(detection);
+		// Unity Bug -> http://answers.unity3d.com/questions/962142/what-is-physx-postislandgen-and-how-can-i-reduce-i.html?childToView=962652#answer-962652
+		//Ensure(detection);
 		Ensure(movement);
-		this.Assert(detection.isTrigger, "The detection sphere must be a trigger!");
+		//this.Assert(detection.isTrigger, "The detection sphere must be a trigger!");
 		inspectTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertness;
 		state = State.Seeking;
 
@@ -177,13 +180,13 @@ public class Thug : CharacterBase
 		//GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.force, ForceMode.Impulse);
 	}
 
-	public override void Randomize ()
+	public override void Ressurect ()
 	{
 		this.Health.totalHealth = 100 * strengthMultiplier;
 		this.Health.Reset();
 
 		alertness *= strengthMultiplier;
-		detection.radius *= strengthMultiplier;
+		detectionRadius *= strengthMultiplier;
 		movement.speed *= strengthMultiplier;
 
 		for(int i = 0; i < holdsters.Length; i++)
@@ -192,7 +195,7 @@ public class Thug : CharacterBase
 			holdsters[i].gun.Reset();
 
 		}
-		base.Randomize ();
+		base.Ressurect ();
 	}
 }
 

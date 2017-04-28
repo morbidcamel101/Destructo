@@ -21,7 +21,7 @@ public abstract class CharacterBase: BehaviorBase
 
 	protected abstract void OnLowHealth();
 
-	public virtual void Randomize()
+	public virtual void Ressurect()
 	{
 		
 	}

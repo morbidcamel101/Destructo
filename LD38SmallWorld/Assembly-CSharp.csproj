@@ -70,6 +70,7 @@
      <Compile Include="Assets\Movement\ITarget.cs" />
      <Compile Include="Assets\Movement\Movement.cs" />
      <Compile Include="Assets\Movement\NavMeshMovement.cs" />
+     <Compile Include="Assets\Movement\NavTarget.cs" />
      <Compile Include="Assets\Movement\StaticTarget.cs" />
      <Compile Include="Assets\Movement\TargetBase.cs" />
      <Compile Include="Assets\Projectiles\Ammo.cs" />

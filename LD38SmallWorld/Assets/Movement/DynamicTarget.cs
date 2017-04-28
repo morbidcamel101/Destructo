@@ -27,5 +27,7 @@ public sealed class DynamicTarget: TargetBase
 			
 		}
 	}
+
+	public override bool IsReady { get { return Position != Vector3.zero; } }
 }
 
