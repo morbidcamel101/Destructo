@@ -49,7 +49,7 @@ public class Gun : BehaviorBase
     {
     	// LD38 BUG FIXED - I divided!?!?
     	reactionSpeed = reactionSpeed * strengthMultiplier;
-    	fireRate = fireRate * strengthMultiplier;
+    	fireRate = Mathf.Clamp(fireRate / strengthMultiplier, 0.1f, 2f);
     }
 
     // Update is called once per frame

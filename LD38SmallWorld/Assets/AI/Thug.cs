@@ -27,8 +27,6 @@ public class Thug : CharacterBase
 	internal int points = 100;
 	private Collider bodyCollider;
 	private float alertnessFactor = 0f;
-	private Impact impact; 
-
 
 	void Awake()
 	{
@@ -40,7 +38,6 @@ public class Thug : CharacterBase
 		bodyCollider = this.GetComponent<Collider>();
 		if (movement == null)
 			movement = GetComponent<MovementMotorBase>();
-		impact = GetComponent<Impact>();
 		Ensure(bodyCollider.material); // Make sure we can get the impact effect!
 		// Unity Bug -> http://answers.unity3d.com/questions/962142/what-is-physx-postislandgen-and-how-can-i-reduce-i.html?childToView=962652#answer-962652
 		//Ensure(detection);

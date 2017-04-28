@@ -11,7 +11,7 @@ using UnityEngine.AI;
 [AddComponentMenu("Small World/Character Manager")]
 public sealed class CharacterManager : BehaviorBase
 {
-	public enum State { Initializing, WaitingForDrop, CheckingSpawnPoints, Monitoring, Spawn, ResolvePath };
+	public enum State { Initializing, WaitingForDrop, CheckingSpawnPoints, Monitoring, Spawn, ResolvePath, WaveEnd };
 	public State state;
 	public float statusInterval = 1f;
 	public CharacterDefinition[] characters;
@@ -23,6 +23,7 @@ public sealed class CharacterManager : BehaviorBase
 	public Transform terrain;
 	public float dropWaitTime = 15f;
 	public float spawnDelay = 15f;
+	public float waveDelayTime = 5f;
 	// Controls difficulty
 	public float spawnInterval = 10f;
 	public int population = 100;
@@ -30,16 +31,21 @@ public sealed class CharacterManager : BehaviorBase
 	public float minStrengthMultiplier = 1f;
 	public float maxStrengthMultiplier = 10f;
 	public float maxNavClearance = 4f;
+	public float waveMultiplier = 1.25f;
 
 
 	internal SpawnPoint[] spawnPoints;
 	internal List<GameObject> spawned = new List<GameObject>();
+	internal int waveCount = 1;
 	private Queue<NavMeshMovement> pathQueue = new Queue<NavMeshMovement>();
 	private float resumeTime;
+	private int restorePopulation;
 
 	void Awake()
 	{
 		_instance = this;
+
+		restorePopulation = population;
 		Ensure(spawnPointPrefab);
 		Ensure(terrain);
 
@@ -119,6 +125,13 @@ public sealed class CharacterManager : BehaviorBase
 			case State.Spawn:
 				Respawn();
 				resumeTime = Time.time + statusInterval;
+				state = State.Monitoring;
+				break;
+
+			case State.WaveEnd:
+				if (Time.time < resumeTime)
+					return;
+					Repopulate(waveMultiplier);
 				state = State.Monitoring;
 				break;
 		}
@@ -258,11 +271,24 @@ public sealed class CharacterManager : BehaviorBase
 		return null;
 	}
 
+	public void Repopulate(float multiplier)
+	{
+		population = (int)(restorePopulation * multiplier);
+		restorePopulation = population;
+		minStrengthMultiplier += multiplier;
+		maxStrengthMultiplier += multiplier;
+		waveCount++;
+
+		state = State.WaveEnd;
+	}
+
 	public void Respawn()
 	{
-		if (population == 0)
+		if (population <= 0)
 		{
 			Log("WAVE Completed!");
+			resumeTime = Time.time + waveDelayTime;
+			state = State.WaveEnd;
 			return;
 		}
 		var spawnPoint = GetNextSpawnPoint();
@@ -285,12 +311,12 @@ public sealed class CharacterManager : BehaviorBase
 
 			spawned.Add(obj);
 		}
-
-		this.population--;
 	}
 
 	public void Dead(GameObject obj)
 	{
+		this.population--;
+
 		Spawner.Recycle(obj);
 		this.spawned.Remove(obj);
 	}
