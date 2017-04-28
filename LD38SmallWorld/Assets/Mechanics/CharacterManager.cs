@@ -131,7 +131,8 @@ public sealed class CharacterManager : BehaviorBase
 			case State.WaveEnd:
 				if (Time.time < resumeTime)
 					return;
-					Repopulate(waveMultiplier);
+
+				Repopulate(waveMultiplier);
 				state = State.Monitoring;
 				break;
 		}
@@ -278,19 +279,11 @@ public sealed class CharacterManager : BehaviorBase
 		minStrengthMultiplier += multiplier;
 		maxStrengthMultiplier += multiplier;
 		waveCount++;
-
-		state = State.WaveEnd;
 	}
 
 	public void Respawn()
 	{
-		if (population <= 0)
-		{
-			Log("WAVE Completed!");
-			resumeTime = Time.time + waveDelayTime;
-			state = State.WaveEnd;
-			return;
-		}
+		CheckPopulation();
 		var spawnPoint = GetNextSpawnPoint();
 		if (spawnPoint == null)
 			return;
@@ -319,6 +312,18 @@ public sealed class CharacterManager : BehaviorBase
 
 		Spawner.Recycle(obj);
 		this.spawned.Remove(obj);
+
+		CheckPopulation();
+	}
+
+	private void CheckPopulation()
+	{
+		if (population > 0)
+			return;
+		
+		Log("WAVE Completed!");
+		resumeTime = Time.time + waveDelayTime;
+		state = State.WaveEnd;
 	}
 
 	public void QueueResolve(NavMeshMovement movement)

@@ -27,6 +27,7 @@ public class Thug : CharacterBase
 	internal int points = 100;
 	private Collider bodyCollider;
 	private float alertnessFactor = 0f;
+	private float dodgeTime;
 
 	void Awake()
 	{
@@ -172,7 +173,13 @@ public class Thug : CharacterBase
 	{
 		currentTarget = bullet.sender;
 		Player.score += Convert.ToInt32(bullet.damage);
-		state = State.Inspect; // Move out the way
+
+		if (Time.time > dodgeTime)
+		{
+			dodgeTime = Time.time + this.alertnessFactor;
+			state = State.Inspect; // Move out the way
+		}
+
 
 		//GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.force, ForceMode.Impulse);
 	}
