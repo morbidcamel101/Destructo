@@ -27,9 +27,8 @@ public class Impact: BehaviorBase
 		var physics = instance.GetComponent<ExplosionPhysicsForce>();
 		if (physics)
 		{
-			physics.explosionForce = 0; // Don't let physics mess it up for now
+			physics.explosionForce = force; // Don't let physics mess it up for now
 		}
-
 	}
 
 	private void BulletImpact (Vector3 point, Vector3 normal, Bullet bullet)
@@ -37,17 +36,14 @@ public class Impact: BehaviorBase
 		// TODO Kick off audio
 		// NOTE: The bullet get send with the message - what's the last thing that goes through a characters head? -- BULLET!!
 
-		SendMessage("CanImpact", bullet, SendMessageOptions.DontRequireReceiver);
+		SendMessage("CanImpact", bullet, SendMessageOptions.DontRequireReceiver); // Reciever should call bullet.Hit ()!!
 
 		if (bullet.didHit)
 		{
-			SendMessage ("OnImpact", bullet, SendMessageOptions.DontRequireReceiver); // Reciever should call bullet.Hit ()!!
-			if (bullet.didHit)
-			{
-				// bullet was used
-				var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
-				SpawnEffect (impactEffect, point, Quaternion.identity, bullet.force * bullet.strengthMultiplier);
-			}
+			SendMessage ("OnImpact", bullet, SendMessageOptions.DontRequireReceiver); 
+			// bullet was used
+			var impactEffect = MaterialImpactManager.Instance.GetImpactEffect (material);
+			SpawnEffect (impactEffect, point, Quaternion.LookRotation(normal), bullet.force * bullet.strengthMultiplier);
 		}
 	}
 

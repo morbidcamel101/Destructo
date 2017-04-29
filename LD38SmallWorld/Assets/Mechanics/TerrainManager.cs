@@ -32,4 +32,9 @@ public  sealed class TerrainManager : BehaviorBase {
 		}*/
 	}
 
+
+	void CanImpact(Bullet bullet)
+	{
+		bullet.didHit = true;
+	}
 }

@@ -76,6 +76,7 @@
      <Compile Include="Assets\Movement\TargetBase.cs" />
      <Compile Include="Assets\Projectiles\Ammo.cs" />
      <Compile Include="Assets\Projectiles\Bullet.cs" />
+     <Compile Include="Assets\Projectiles\BulletTargeting.cs" />
      <Compile Include="Assets\Projectiles\Gun.cs" />
      <Compile Include="Assets\Projectiles\Holdster.cs" />
      <Compile Include="Assets\Projectiles\Impact.cs" />

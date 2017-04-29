@@ -7,7 +7,7 @@ public class HitInfo
 {
 	public RaycastHit hit;
 
-	public Vector3 target;
+	public ITarget target;
 
 
 }

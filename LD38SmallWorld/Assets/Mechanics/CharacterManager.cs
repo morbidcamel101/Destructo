@@ -250,7 +250,7 @@ public sealed class CharacterManager : BehaviorBase
 		return this.characters.FirstOrDefault(c => c.id == id);
 	}
 
-	private CharacterDefinition GetRandomCharacter()
+	private CharacterDefinition GetRandomCharacterDefinition()
 	{
 		var list = new List<CharacterDefinition>(this.characters);
 		list.Sort((x,y) => Random.value.CompareTo(Random.value));
@@ -288,20 +288,15 @@ public sealed class CharacterManager : BehaviorBase
 		if (spawnPoint == null)
 			return;
 
-		var character = GetRandomCharacter();
+		var definition = GetRandomCharacterDefinition();
 
-		var obj = Spawner.Spawn(character.character, false, spawnPoint.transform.position, Quaternion.identity);
+		var obj = Spawner.Spawn(definition.character, false, spawnPoint.transform.position, Quaternion.identity);
 		var spawn = obj.GetComponent<CharacterBase>();
 		if (spawn != null)
 		{
-			Thug thug = spawn as Thug;
-			if (thug != null)
-			{
-				thug.strengthMultiplier = character.strengthMultiplier;
-				thug.strengthMultiplier *= UnityEngine.Random.Range(this.minStrengthMultiplier, this.maxStrengthMultiplier) * spawnPoint.strengthMultiplier;
-			}
-			spawn.Ressurect();
-
+			var multiplier = definition.strengthMultiplier;
+			multiplier *= UnityEngine.Random.Range(this.minStrengthMultiplier, this.maxStrengthMultiplier) + spawnPoint.strengthMultiplier;
+			spawn.Spawn(multiplier);
 			spawned.Add(obj);
 		}
 	}

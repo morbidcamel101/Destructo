@@ -10,24 +10,23 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Impact))]
 public class Thug : CharacterBase
 {
-	public enum State { Seeking, Inspect, Attack, Attacking, Attacked, Hide, Hiding }
+	public enum State { Seeking, Dodge, Attack, Attacking, Attacked, Hide, Hiding }
 	public float strengthMultiplier = 1f;
 	public float alertness = 0.5f;
 	public State state;
 	public float decisionDelay = 10f;
 	public float minInspectionDelay = 5f;
 	public float maxInspectionDelay = 15f;
-
 	public float detectionRadius = 100f;
-	private MovementMotorBase movement;
-	private CharacterBase currentTarget;
-	private float resumeTime;
-	private float inspectTime;
 	public Prototype smokePrefab;
+	public float targetOffset = 10f; // Basically the most dangerous distance ;)
+
+	private MovementMotorBase movement;
+	private ITarget currentTarget;
+	private float resumeTime;
 	internal int points = 100;
 	private Collider bodyCollider;
 	private float alertnessFactor = 0f;
-	private float dodgeTime;
 
 	void Awake()
 	{
@@ -40,11 +39,12 @@ public class Thug : CharacterBase
 		if (movement == null)
 			movement = GetComponent<MovementMotorBase>();
 		Ensure(bodyCollider.material); // Make sure we can get the impact effect!
-		// Unity Bug -> http://answers.unity3d.com/questions/962142/what-is-physx-postislandgen-and-how-can-i-reduce-i.html?childToView=962652#answer-962652
+		// Unity Bug with trigger colliders and PhysX check my clips on twitch.tv/morbidcamel101 -
+		// > http://answers.unity3d.com/questions/962142/what-is-physx-postislandgen-and-how-can-i-reduce-i.html?childToView=962652#answer-962652
 		//Ensure(detection);
 		Ensure(movement);
 		//this.Assert(detection.isTrigger, "The detection sphere must be a trigger!");
-		inspectTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertness;
+		resumeTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertness;
 		state = State.Seeking;
 
 	}
@@ -55,40 +55,39 @@ public class Thug : CharacterBase
 		switch(state)
 		{
 			case State.Seeking:
-			if (Time.time < resumeTime)
-				return;
+				if (Time.time < resumeTime)
+					return;
 
-			resumeTime = Time.time + decisionDelay * alertnessFactor;
+				resumeTime = Time.time + decisionDelay * alertnessFactor;
 
-			if (currentTarget != null)
-			{
-				state = State.Attack;
+				if (currentTarget != null)
+				{
+					state = State.Attack;
+					break;
+				}
+
+				if (LockOn())
+				{
+					state = State.Attack;
+				}
+				// Exit stage left - Snagglepuss
+				resumeTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertnessFactor;
+				state = State.Dodge;
 				break;
-			}
 
-			if (LockOn())
-			{
-				state = State.Attack;
-			}
+			case State.Dodge:
+				Log("{0} Dodge", this.gameObject);
 
-			if (Time.time > inspectTime)
-			{
-				state = State.Inspect;
-			}
-			break;
-
-			case State.Inspect:
-			Log("{0} Inspecting", this.gameObject);
-			var target = CharacterManager.Instance.GetRandomPosition(transform.position, UnityEngine.Random.value * detectionRadius);
-			if (target == null)
-			{
+				var target = CharacterManager.Instance.GetRandomPosition(transform.position, Mathf.Clamp(UnityEngine.Random.value * detectionRadius, 0.1f, detectionRadius));
+				if (target == null)
+				{
+					state = State.Seeking;
+					break;
+				}
+				movement.MoveTo(new StaticTarget(target.Value, (target.Value - transform.position).normalized));
+				//dodgeTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertnessFactor;
 				state = State.Seeking;
 				break;
-			}
-			movement.MoveTo(new StaticTarget(target.Value, (target.Value - transform.position).normalized));
-			inspectTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertnessFactor;
-			state = State.Seeking;
-			break;
 
 			case State.Attack:
 				this.Log("Target locked");
@@ -97,13 +96,14 @@ public class Thug : CharacterBase
 				break;
 
 			case State.Attacking:
-				if (!currentTarget)
+				if (currentTarget == null)
 				{
 					state = State.Attacked;
 					break;
 				}
-				FireAt(currentTarget.transform);
-				
+
+				FireAt(currentTarget);
+
 				if (!LockOn())
 				{
 					state = State.Attacked;
@@ -125,9 +125,15 @@ public class Thug : CharacterBase
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, detectionRadius))
 		{
-			if (currentTarget = hit.collider.GetComponentInParent<Player>())
+			var dyn = currentTarget as DynamicTarget;
+			if (dyn != null && hit.transform == dyn.target)
+				return true;
+
+			var p = hit.collider.GetComponentInParent<Player>();
+			if (p != null)
 			{
-				movement.MoveTo(new DynamicTarget(this.transform, currentTarget.transform));
+				currentTarget = new DynamicTarget(transform, hit.transform);
+				movement.MoveTo(new DynamicTarget(this.transform, hit.transform, targetOffset));
 				return true;
 			}
 		}
@@ -137,6 +143,7 @@ public class Thug : CharacterBase
 
 	protected override void OnDeath ()
 	{
+		
 		CharacterManager.Instance.Dead(this.gameObject);
 		Player.score += points;
 	}
@@ -149,7 +156,7 @@ public class Thug : CharacterBase
 
 	protected override void OnLowHealth ()
 	{
-
+		state = State.Dodge;
 	}
 
 	protected override void CanImpact (Bullet bullet)
@@ -171,35 +178,44 @@ public class Thug : CharacterBase
 
 	protected override void OnImpact (Bullet bullet)
 	{
-		currentTarget = bullet.sender;
-		Player.score += Convert.ToInt32(bullet.damage);
-
-		if (Time.time > dodgeTime)
+		var dyn = currentTarget as DynamicTarget;
+		if (dyn == null || dyn.target != bullet.sender.transform)
 		{
-			dodgeTime = Time.time + this.alertnessFactor;
-			state = State.Inspect; // Move out the way
+			currentTarget = new DynamicTarget(transform, bullet.sender.transform); // Return to sender
 		}
 
 
-		//GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.force, ForceMode.Impulse);
+		Player.score += Convert.ToInt32(bullet.damage);
+
+		if (Time.time > resumeTime)
+		{
+			resumeTime = Time.time + this.alertnessFactor;
+			state = State.Dodge; // Move out the way
+		}
+		// Whysics
+		GetComponent<Rigidbody>().AddForce(bullet.transform.forward * bullet.force, ForceMode.Impulse);
+
 	}
 
-	public override void Ressurect ()
+	public override void Spawn (float strengthMultiplier)
 	{
+		this.strengthMultiplier = strengthMultiplier;
 		this.Health.totalHealth = 100 * strengthMultiplier;
 		this.Health.Reset();
 
 		alertness *= strengthMultiplier;
 		detectionRadius *= strengthMultiplier;
 		movement.speed *= strengthMultiplier;
+		points = (int)(points * strengthMultiplier);
+
+		// Not that simple
+		//transform.localScale = Vector3.ClampMagnitude(transform.localScale * strengthMultiplier, 5f);
 
 		for(int i = 0; i < holdsters.Length; i++)
 		{
-			holdsters[i].gun.strengthMultiplier = this.strengthMultiplier;
-			holdsters[i].gun.Reset();
-
+			holdsters[i].gun.Reset(this.strengthMultiplier);
 		}
-		base.Ressurect ();
+		base.Spawn (strengthMultiplier);
 	}
 }
 

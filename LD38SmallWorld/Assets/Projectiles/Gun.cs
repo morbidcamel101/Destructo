@@ -17,7 +17,7 @@ public class Gun : BehaviorBase
 	public Transform gunChamber;
 	public float reactionSpeed = 1f;
 	public float strengthMultiplier = 1f;
-
+	public BulletTargeting targeting;
     public AudioClip shootSound;
 
 	private Bullet currentBullet = null;
@@ -25,10 +25,12 @@ public class Gun : BehaviorBase
 	private Ammo currentAmmo;
 	internal bool fire;
 	private Animator anim;
-	private Vector3 target;
+	private ITarget target;
     private AudioSource audioSource;
     private float volLowRange = .5f;
     private float volHighRange = 1.0f;
+
+    private CharacterBase character;
 
     // Use this for initialization
     void Start ()
@@ -38,6 +40,8 @@ public class Gun : BehaviorBase
 		currentAmmo = ammo[0];
 		Ensure(currentAmmo.bulletType, "Invalid Ammo Assigned!");
 		anim = GetComponentInChildren<Animator>();
+		character = GetComponentInParent<CharacterBase>();
+		Ensure(character);
 	}
 
     private void Awake()
@@ -45,11 +49,12 @@ public class Gun : BehaviorBase
         audioSource = GetComponent<AudioSource>();
     }
 
-    public void Reset()
+    public void Reset(float strengthMultiplier)
     {
     	// LD38 BUG FIXED - I divided!?!?
-    	reactionSpeed = reactionSpeed * strengthMultiplier;
-    	fireRate = Mathf.Clamp(fireRate / strengthMultiplier, 0.1f, 2f);
+		this.strengthMultiplier = strengthMultiplier;
+		reactionSpeed = reactionSpeed * strengthMultiplier;
+    	fireRate = Mathf.Clamp(fireRate / strengthMultiplier, 0.05f, 2f);
     }
 
     // Update is called once per frame
@@ -78,8 +83,6 @@ public class Gun : BehaviorBase
 
 				currentBullet = bulletObj.GetComponent<Bullet>();
 				currentBullet.strengthMultiplier = this.strengthMultiplier;
-				currentBullet.Shoot(this.GetComponentInParent<CharacterBase>());
-
 				UpdateAnimatorAndSound(true, false);
 				state = State.Loading;
 			break;
@@ -99,6 +102,9 @@ public class Gun : BehaviorBase
 			break; 
 
 			case State.Fire:
+				
+				currentBullet.Shoot(character, GetBulletTarget(target));
+
 				SendMessageUpwards("OnFire", currentBullet, SendMessageOptions.RequireReceiver);
 				currentBullet = null; // Make ready for the next bullet
 				UpdateAnimatorAndSound(true, false);
@@ -140,14 +146,14 @@ public class Gun : BehaviorBase
 			break;
 		}
 
-		if (target == Vector3.zero)
+		if (target == null || !target.IsReady)
 			return;
 
-		var rotation =  Quaternion.LookRotation(target - transform.position);
+		var rotation =  Quaternion.LookRotation(target.Position - transform.position);
  		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * reactionSpeed);
 
-		//this.transform.LookAt(target);
-		gunChamber.LookAt(target);
+ 		//this.transform.LookAt(target);
+		gunChamber.LookAt(target.Position);
 	}
 
 	public void UpdateAnimatorAndSound(bool recoil, bool reload)
@@ -179,6 +185,18 @@ public class Gun : BehaviorBase
 		}
 	}
 
+	private ITarget GetBulletTarget(ITarget target)
+	{
+		switch(targeting)
+		{
+			case BulletTargeting.HeatSeeker:
+				return target;
+
+			default:
+				return new StaticTarget(target.Position, target.GetDirection(gunChamber.position)); 
+		}
+	}
+
 
 	public void ChangeAmmo()
 	{
@@ -190,12 +208,7 @@ public class Gun : BehaviorBase
 		state = State.Reload;
 	}
 
-	public bool FireAt(Transform target)
-	{
-		return FireAt(target.position);
-	}
-
-	public bool FireAt(Vector3 target)
+	public bool FireAt(ITarget target)
 	{
 		this.target = target;
 
@@ -204,7 +217,7 @@ public class Gun : BehaviorBase
 
 	public bool Fire()
 	{
-		if (target == Vector3.zero)
+		if (!target.IsReady)
 			return false;
 
 		fire = true;
@@ -217,7 +230,7 @@ public class Gun : BehaviorBase
 		fire = false;
 	}
 
-	public void SetTarget(Vector3 target)
+	public void SetTarget(ITarget target)
 	{
 		// ToDO - Miss - random inaccuracy
 		this.target = target;

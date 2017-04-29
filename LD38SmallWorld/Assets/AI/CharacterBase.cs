@@ -7,9 +7,12 @@ using System.Collections.Generic;
 
 
 public abstract class CharacterBase: BehaviorBase
-{	
+{
 	// Fired from Health comp
-	protected abstract void OnDeath();
+	protected virtual void OnDeath()
+	{
+		dead = true;
+	}
 
 	// Fired from Impact comp
 	protected abstract void OnImpact(Bullet bullet);
@@ -21,12 +24,12 @@ public abstract class CharacterBase: BehaviorBase
 
 	protected abstract void OnLowHealth();
 
-	public virtual void Ressurect()
+	public virtual void Spawn(float strengthMultiplier)
 	{
-		
 	}
 
 	public Holdster[] holdsters; // Desscribe the guns
+	public bool dead {get {return Health.dead;} set {Health.dead = value;} }
 
 
 	public Gun GetGun(string id)
@@ -38,7 +41,7 @@ public abstract class CharacterBase: BehaviorBase
 		return holdster.gun;
 	}
 
-	public virtual void SetTarget(Vector3 target)
+	public virtual void SetTarget(ITarget target)
 	{
 		foreach(var hold in holdsters)
 		{
@@ -64,28 +67,28 @@ public abstract class CharacterBase: BehaviorBase
 		gun.StopFire();
 	}
 
-	public void FireAt(Transform target, string id = null)
-	{
-		FireAt(target.position, id);
-	}
-
-	public void FireAt(Vector3 position, string id = null)
+	public void FireAt(ITarget target, string id = null)
 	{
 		if (holdsters.Length == 0)
 			return;
 
 		var gun = id != null ? GetGun(id) : holdsters[0].gun;
-		gun.FireAt(position);
+		gun.FireAt(target);
 	}
 
-	public Health Health { get { return this.GetComponent<Health>(); } }
+	private Health _health;	
+	public Health Health 
+	{ 
+		get 
+		{ 
+			return _health ?? (_health = this.GetComponent<Health>());
+		} 
+	}
 
 	protected virtual void OnFire(Bullet bullet)
 	{
 		// Bullet is sent!!
 		bullet.sender = this; // From Russia with love :)
-
-
 	}
 
 	

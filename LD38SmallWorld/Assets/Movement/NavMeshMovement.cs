@@ -34,6 +34,8 @@ public sealed class NavMeshMovement: MovementMotorBase
 		// LD38 Code
 		this.transform.position =  Vector3.Lerp(this.transform.position, this.transform.position + (Target.GetDirection(transform.position) * speed), Time.deltaTime);
 
+		Debug.DrawLine(transform.position, Target.Position);
+
 		// TODO - Rotation
 		if (Target.InRange(transform.position, targetRange))
 		{

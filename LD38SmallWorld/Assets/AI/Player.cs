@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 public class Player: CharacterBase
 {
 	public int score = 0;
-	internal HitInfo aim = new HitInfo();
-
 	public Transform head;
 	public Transform zoomPoint;
 	public Transform cameraMount;
@@ -18,18 +16,17 @@ public class Player: CharacterBase
 	public float normal = 60f;
 	public float minAimDistance = 20f;
 	public bool isZooming;
-	public bool dead {
-		get { return health.dead; }
-	}
-
-	internal Health health;
+	internal HitInfo aim = new HitInfo();
+	private ITarget zoomTarget;
+	private ITarget headTarget;
 
 	void Awake()
 	{
 		Ensure(head);
 		Ensure(zoomPoint);
 		Ensure(cameraMount);
-		health = GetComponent<Health>();
+		zoomTarget = new DynamicTarget(this.head, this.zoomPoint);
+		headTarget = new DynamicTarget(this.zoomPoint, this.head);
 	}
 
 	void Update()
@@ -64,10 +61,16 @@ public class Player: CharacterBase
 
 		var distSqr = minAimDistance * minAimDistance;
 
+
 		if (Physics.Raycast(ray, out aim.hit) && (aim.hit.point - transform.position).sqrMagnitude > distSqr)
-			SetTarget(aim.hit.point);
+			
+			SetTarget(new StaticTarget(aim.hit.point, -aim.hit.normal));
+
 		else
-			SetTarget(ray.GetPoint(1000));
+		{
+			var target = ray.GetPoint(1000);
+			SetTarget(new StaticTarget(target, (target - this.transform.position).normalized));
+		}
 
 
 		// Check the gun status
@@ -95,19 +98,20 @@ public class Player: CharacterBase
 
 	private void PerformZoom()
 	{
-		//cameraMount.transform.position = Vector3.Lerp(head.position, zoomPoint.position, Time.deltaTime * smoothing);
+		// TODO - Write head script rather
+		//cameraMount.transform.localPosition = Vector3.Lerp(cameraMount.transform.localPosition, cameraMount.transform.localPosition + (zoomTarget.GetDirection(transform.position) * smoothing), Time.deltaTime);
 		var cam = Camera.main;
 		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, zoom, Time.deltaTime * smoothing);
 	}
 
 	private void PerformUnzoom()
 	{
-		//cameraMount.transform.position = Vector3.Lerp(zoomPoint.position, head.position, Time.deltaTime * smoothing);
+		//cameraMount.transform.localPosition = Vector3.Lerp(cameraMount.transform.localPosition, cameraMount.transform.localPosition + (headTarget.GetDirection(transform.localPosition) * smoothing), Time.deltaTime);
 		var cam = Camera.main;
 		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, normal, Time.deltaTime * smoothing);
 	}
 
-	public override void SetTarget (Vector3 target)
+	public override void SetTarget (ITarget target)
 	{
 		base.SetTarget (target);
 		aim.target = target;
