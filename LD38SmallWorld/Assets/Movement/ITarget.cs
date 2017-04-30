@@ -20,6 +20,9 @@ public interface ITarget
 
 	bool IsReady {get; }
 
+	bool IsSame(ITarget other);
+
+	void CopyFrom(ITarget other);
 
 }
 

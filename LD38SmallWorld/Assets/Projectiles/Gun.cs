@@ -80,9 +80,9 @@ public class Gun : BehaviorBase
 				}
 
 				var bulletObj = Spawner.Spawn(currentAmmo.bulletType.prefab, false, gunChamber.position, gunChamber.rotation);
-
 				currentBullet = bulletObj.GetComponent<Bullet>();
 				currentBullet.strengthMultiplier = this.strengthMultiplier;
+				currentBullet.Shoot(character, GetBulletTarget(target));
 				UpdateAnimatorAndSound(true, false);
 				state = State.Loading;
 			break;
@@ -102,9 +102,6 @@ public class Gun : BehaviorBase
 			break; 
 
 			case State.Fire:
-				
-				currentBullet.Shoot(character, GetBulletTarget(target));
-
 				SendMessageUpwards("OnFire", currentBullet, SendMessageOptions.RequireReceiver);
 				currentBullet = null; // Make ready for the next bullet
 				UpdateAnimatorAndSound(true, false);
@@ -149,6 +146,7 @@ public class Gun : BehaviorBase
 		if (target == null || !target.IsReady)
 			return;
 
+		// http://answers.unity3d.com/questions/12213/how-can-i-make-the-transformlookat-function-look-s.html
 		var rotation =  Quaternion.LookRotation(target.Position - transform.position);
  		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * reactionSpeed);
 

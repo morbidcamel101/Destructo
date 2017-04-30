@@ -17,16 +17,16 @@ public class Player: CharacterBase
 	public float minAimDistance = 20f;
 	public bool isZooming;
 	internal HitInfo aim = new HitInfo();
-	private ITarget zoomTarget;
-	private ITarget headTarget;
+	//private ITarget zoomTarget;
+	//private ITarget headTarget;
 
 	void Awake()
 	{
 		Ensure(head);
 		Ensure(zoomPoint);
 		Ensure(cameraMount);
-		zoomTarget = new DynamicTarget(this.head, this.zoomPoint);
-		headTarget = new DynamicTarget(this.zoomPoint, this.head);
+		//zoomTarget = new DynamicTarget(this.head, this.zoomPoint);
+		//headTarget = new DynamicTarget(this.zoomPoint, this.head);
 	}
 
 	void Update()
@@ -63,16 +63,23 @@ public class Player: CharacterBase
 
 
 		if (Physics.Raycast(ray, out aim.hit) && (aim.hit.point - transform.position).sqrMagnitude > distSqr)
-			
-			SetTarget(new StaticTarget(aim.hit.point, -aim.hit.normal));
+		{
+			if (aim.hit.transform.GetComponent<Thug>() != null)
+			{
+				var offset = aim.hit.point - aim.hit.transform.position;
+				SetTarget(new DynamicTarget(transform, aim.hit.transform, offset));
+			}
+			else
+			{
+				SetTarget(new StaticTarget(aim.hit.point, (aim.hit.point - transform.position).normalized));
+			}
 
+		}
 		else
 		{
 			var target = ray.GetPoint(1000);
 			SetTarget(new StaticTarget(target, (target - this.transform.position).normalized));
 		}
-
-
 		// Check the gun status
 		UpdateGuns();
 			
@@ -113,6 +120,11 @@ public class Player: CharacterBase
 
 	public override void SetTarget (ITarget target)
 	{
+		if (target.IsSame(aim.target))
+		{
+			aim.target.CopyFrom(target);
+			target = aim.target;
+		}
 		base.SetTarget (target);
 		aim.target = target;
 	}

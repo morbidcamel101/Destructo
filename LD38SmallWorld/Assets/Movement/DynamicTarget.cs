@@ -4,7 +4,7 @@ using UnityEngine;
 [Serializable]
 public sealed class DynamicTarget: TargetBase
 {
-	public DynamicTarget(Transform source, Transform target, float offset = 0)
+	public DynamicTarget(Transform source, Transform target, Vector3 offset = default(Vector3))
 	{
 		this.source = source;
 		this.target = target;
@@ -14,22 +14,43 @@ public sealed class DynamicTarget: TargetBase
 
 	public Transform source;
 	public Transform target;
-	public float offset;
+	public Vector3 offset;
 
 
 	public override Vector3 Position {
 		get {
-			return target != null ? (target.position + Direction * offset) : Vector3.zero;
+			return target != null ? (target.position + offset) : Vector3.zero;
 		}
 	}
 
 	public override Vector3 Direction {
 		get {
-			return (target.position - source.position).normalized;
+			return ((target.position + offset) - source.position).normalized;
 			
 		}
 	}
 
 	public override bool IsReady { get { return Position != Vector3.zero; } }
+
+	public override bool IsSame (ITarget other)
+	{
+		DynamicTarget dyn = other as DynamicTarget;
+		if (dyn != null)
+		{
+			return dyn.target == target;
+		}
+		return base.IsSame (other);
+	}
+
+	public override void CopyFrom (ITarget other)
+	{
+		var dyn = other as DynamicTarget;
+		if (dyn == null)
+			return;
+
+		this.source = dyn.source;
+		this.target = dyn.target;
+		this.offset = dyn.offset;
+	}
 }
 

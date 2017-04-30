@@ -25,6 +25,7 @@ public sealed class NavMeshMovement: MovementMotorBase
 
 	void FixedUpdate()
 	{
+		PhysicsUpdate();
 		if (Target == null || !Target.IsReady)
 		{
 			enabled = false;
@@ -32,7 +33,7 @@ public sealed class NavMeshMovement: MovementMotorBase
 		}
 
 		// LD38 Code
-		this.transform.position =  Vector3.Lerp(this.transform.position, this.transform.position + (Target.GetDirection(transform.position) * speed), Time.deltaTime);
+		this.transform.position =  Vector3.Lerp(this.transform.position, this.transform.position + (Target.GetDirection(transform.position) * speed), Time.fixedDeltaTime);
 
 		Debug.DrawLine(transform.position, Target.Position);
 
@@ -41,6 +42,7 @@ public sealed class NavMeshMovement: MovementMotorBase
 		{
 			enabled = false;
 		}
+
 	}
 
 	public override void MoveTo (ITarget target)

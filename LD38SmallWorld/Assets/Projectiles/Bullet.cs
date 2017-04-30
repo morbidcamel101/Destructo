@@ -4,7 +4,7 @@ using System;
 
 
 [AddComponentMenu("Small World/Bullet")]
-public class Bullet : BehaviorBase
+public class Bullet : MovingBody
 {
 	public float speed = 10;
 	public float lifeTime = 0.5f;
@@ -12,16 +12,14 @@ public class Bullet : BehaviorBase
 	public float damage = 10f;
 	public float force = 1f;
 	public float strengthMultiplier = 1f;
-	internal bool didHit = false;
-
+	public bool didHit = false;
+	public float currentDistance;
+	public float hitDistance = 0.01f;
 	public CharacterBase sender;
-
 	private Transform trans;
 	internal ITarget target;
-	private float spawnTime;
 	private Rigidbody rigid;
-	private float currentDistance;
-	private float currentSpeed;
+
 
 
 	void Awake()
@@ -33,27 +31,25 @@ public class Bullet : BehaviorBase
 	void OnEnable()
 	{
 		currentDistance = distance;
-
-
 	}
 
 
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
 	{
-		
-		var delta = target.GetDirection(trans.position) * currentSpeed * Time.deltaTime;
+		PhysicsUpdate();
+
+		var sp = speed * strengthMultiplier;
+		var delta = target.Direction * sp * Time.fixedDeltaTime;
 		trans.position += delta;
-		currentSpeed = speed * strengthMultiplier;
-		currentDistance -= currentSpeed * Time.deltaTime;
-
-
-		if (Time.time > spawnTime + lifeTime)
+		currentDistance -= sp * Time.deltaTime;
+		if (currentDistance < 0f || didHit)
 		{
 			Recycle();
 		}
-
-		if (currentDistance < 0f)
+		var distSqr = hitDistance * hitDistance;
+		var dist = target.GetDistanceSqr(trans.position);
+		if (dist <= distSqr)
 		{
 			Recycle();
 		}
@@ -66,20 +62,19 @@ public class Bullet : BehaviorBase
 		didHit = false;
 		enabled = true;
 		trans = transform;
-		spawnTime = Time.time;
 		Spawner.Recycle(gameObject, lifeTime);
 	}
 
 	public virtual void Hit() 
 	{
 		didHit = true;
-
+		Recycle();
 	}
 
 	public void Recycle()
 	{
 		enabled = false;
-		Spawner.Recycle(gameObject, 0.01f);
+		Spawner.Recycle(gameObject);
 	}
 }
 

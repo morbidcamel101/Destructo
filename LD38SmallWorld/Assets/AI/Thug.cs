@@ -10,7 +10,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Impact))]
 public class Thug : CharacterBase
 {
-	public enum State { Seeking, Dodge, Attack, Attacking, Attacked, Hide, Hiding }
+	public enum State { Seeking, Dodge, Aim, Attack, Attacking, Attacked, Hide, Hiding }
 	public float strengthMultiplier = 1f;
 	public float alertness = 0.5f;
 	public State state;
@@ -20,6 +20,7 @@ public class Thug : CharacterBase
 	public float detectionRadius = 100f;
 	public Prototype smokePrefab;
 	public float targetOffset = 10f; // Basically the most dangerous distance ;)
+	public float raycastInterval = 0.2f;
 
 	private MovementMotorBase movement;
 	private ITarget currentTarget;
@@ -58,17 +59,20 @@ public class Thug : CharacterBase
 				if (Time.time < resumeTime)
 					return;
 
-				resumeTime = Time.time + decisionDelay * alertnessFactor;
-
 				if (currentTarget != null)
 				{
 					state = State.Attack;
 					break;
 				}
+				state = State.Aim;
+				resumeTime = Time.time + decisionDelay * alertnessFactor;
+				break;
 
+			case State.Aim:
 				if (LockOn())
 				{
 					state = State.Attack;
+					break;
 				}
 				// Exit stage left - Snagglepuss
 				resumeTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertnessFactor;
@@ -104,6 +108,7 @@ public class Thug : CharacterBase
 
 				FireAt(currentTarget);
 
+
 				if (!LockOn())
 				{
 					state = State.Attacked;
@@ -133,7 +138,7 @@ public class Thug : CharacterBase
 			if (p != null)
 			{
 				currentTarget = new DynamicTarget(transform, hit.transform);
-				movement.MoveTo(new DynamicTarget(this.transform, hit.transform, targetOffset));
+				movement.MoveTo(new DynamicTarget(this.transform, hit.transform, hit.normal * targetOffset));
 				return true;
 			}
 		}
@@ -170,7 +175,7 @@ public class Thug : CharacterBase
 		{
 			if (smokePrefab.prefab)
 			{
-				var obj = Spawner.Spawn(smokePrefab, false, bullet.transform.position, Quaternion.identity);
+				var obj = Spawner.Spawn(smokePrefab, true, bullet.transform.position, Quaternion.identity);
 				Spawner.Recycle(obj, 5f);
 			}
 		}

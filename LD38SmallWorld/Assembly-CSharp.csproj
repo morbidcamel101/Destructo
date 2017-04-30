@@ -70,6 +70,7 @@
      <Compile Include="Assets\Movement\DynamicTarget.cs" />
      <Compile Include="Assets\Movement\ITarget.cs" />
      <Compile Include="Assets\Movement\Movement.cs" />
+     <Compile Include="Assets\Movement\MovingBody.cs" />
      <Compile Include="Assets\Movement\NavMeshMovement.cs" />
      <Compile Include="Assets\Movement\NavTarget.cs" />
      <Compile Include="Assets\Movement\StaticTarget.cs" />

@@ -23,11 +23,14 @@ public class Impact: BehaviorBase
 			
 		// Kick off effect and recycle
 		var instance = Spawner.Spawn (effect.effect, true, position, rotation);
-		Spawner.Recycle (instance, duration);
-		var physics = instance.GetComponent<ExplosionPhysicsForce>();
-		if (physics)
+		if (instance != null)
 		{
-			physics.explosionForce = force; // Don't let physics mess it up for now
+			var physics = instance.GetComponent<ExplosionPhysicsForce>();
+			if (physics)
+			{
+				physics.explosionForce = force;
+			}
+			Spawner.Recycle (instance, duration);
 		}
 	}
 

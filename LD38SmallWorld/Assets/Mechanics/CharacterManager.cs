@@ -194,15 +194,15 @@ public sealed class CharacterManager : BehaviorBase
 		{
 			case Difficulty.Easy:
 			minStrengthMultiplier = 1f;
-			maxStrengthMultiplier = 3f;
+			maxStrengthMultiplier = 2f;
 			break;
 			case Difficulty.Normal:
 			minStrengthMultiplier = 1f;
-			maxStrengthMultiplier = 5f;
+			maxStrengthMultiplier = 3f;
 			break;
 			case Difficulty.Extreme:
-			minStrengthMultiplier = 10f;
-			maxStrengthMultiplier = 30f;
+			minStrengthMultiplier = 5f;
+			maxStrengthMultiplier = 15f;
 			break;
 		}
 	}

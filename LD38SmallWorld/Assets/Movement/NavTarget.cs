@@ -30,5 +30,14 @@ public class NavTarget : TargetBase
 		return (movement.agent.pathEndPosition - movement.transform.position).sqrMagnitude < range*range;
 	}
 
+	public override void CopyFrom (ITarget other)
+	{
+		var navTarget = other as NavTarget;
+		if (navTarget == null)
+			return;
+
+		this.movement = navTarget.movement;
+	}
+
 }
 

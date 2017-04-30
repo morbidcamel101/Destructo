@@ -29,6 +29,12 @@ public abstract class TargetBase: ITarget
 		return (Position - source).sqrMagnitude < (range * range);
 	}
 
+	public virtual bool IsSame(ITarget other)
+	{
+		return other != null && other.GetType() == this.GetType() && other.Position == this.Position;
+	}
+
+	public abstract void CopyFrom(ITarget other);
 
 }
 

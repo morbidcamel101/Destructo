@@ -9,5 +9,6 @@ public class HitInfo
 
 	public ITarget target;
 
+	public bool locked { get { return target is DynamicTarget; } }
 
 }

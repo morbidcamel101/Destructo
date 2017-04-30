@@ -1,22 +1,25 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AI/Thug.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Projectiles/Bullet.cs">
     <Files>
-      <File FileName="Assets/AI/Thug.cs" Line="183" Column="6" />
-      <File FileName="Assets/Mechanics/CharacterManager.cs" Line="286" Column="21" />
-      <File FileName="Assets/HUD/ScoreMeterManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/AI/CharacterBase.cs" Line="33" Column="72" />
       <File FileName="Assets/Projectiles/Gun.cs" Line="1" Column="1" />
-      <File FileName="Assets/Movement/NavMeshMovement.cs" Line="1" Column="1" />
-      <File FileName="Assets/Projectiles/Bullet.cs" Line="69" Column="6" />
-      <File FileName="Assets/Projectiles/Impact.cs" Line="30" Column="34" />
+      <File FileName="Assets/Projectiles/Bullet.cs" Line="55" Column="4" />
+      <File FileName="Assets/AI/Player.cs" Line="1" Column="1" />
+      <File FileName="Assets/AI/Thug.cs" Line="1" Column="1" />
+      <File FileName="Assets/AI/ViewModels.cs" Line="1" Column="1" />
+      <File FileName="Assets/Core/UIBehavior.cs" Line="1" Column="1" />
+      <File FileName="Assets/Projectiles/Impact.cs" Line="1" Column="1" />
+      <File FileName="Assets/Movement/DynamicTarget.cs" Line="1" Column="1" />
+      <File FileName="Assets/Movement/NavMeshMovement.cs" Line="8" Column="43" />
+      <File FileName="Assets/Movement/MovingBody.cs" Line="17" Column="27" />
+      <File FileName="Assets/Movement/Movement.cs" Line="4" Column="48" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Mechanics/CharacterManager.cs" line="190" column="1" />
-      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Projectiles/Impact.cs" line="49" column="1" />
-      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Movement/NavMeshMovement.cs" line="28" column="1" />
+      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Projectiles/Impact.cs" line="61" column="1" />
+      <Breakpoint file="/Users/johanotto/LudumDare38/LD38SmallWorld/Assets/Projectiles/Impact.cs" line="70" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class MovementMotorBase : BehaviorBase
+public abstract class MovementMotorBase : MovingBody
 {
 	public enum State { Idle, Move, Moving, Stop, Stopping, Stopped };
 

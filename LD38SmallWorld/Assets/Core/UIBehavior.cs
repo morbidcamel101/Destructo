@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class UIBehavior: BehaviorBase
 {
-	public float updateInterval;
+	public float updateInterval = 0.2f;
 
 	private float resumeTime = 0f;
 

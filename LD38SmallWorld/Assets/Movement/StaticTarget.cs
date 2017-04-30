@@ -25,5 +25,11 @@ public sealed class StaticTarget: TargetBase
 	public override bool IsReady {
 		get { return Position != Vector3.zero; }
 	}
+
+	public override void CopyFrom (ITarget other)
+	{
+		position = other.Position;
+		direction = other.Direction;
+	}
 }
 
