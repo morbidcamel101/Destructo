@@ -14,7 +14,7 @@ public class Thug : CharacterBase
 	public float strengthMultiplier = 1f;
 	public float alertness = 0.5f;
 	public State state;
-	public float decisionDelay = 10f;
+	public float decisionDelay = 1f;
 	public float minInspectionDelay = 5f;
 	public float maxInspectionDelay = 15f;
 	public float detectionRadius = 100f;
@@ -23,7 +23,7 @@ public class Thug : CharacterBase
 	public float raycastInterval = 0.2f;
 
 	private MovementMotorBase movement;
-	private ITarget currentTarget;
+	private Motor motor;
 	private float resumeTime;
 	internal int points = 100;
 	private Collider bodyCollider;
@@ -47,6 +47,7 @@ public class Thug : CharacterBase
 		//this.Assert(detection.isTrigger, "The detection sphere must be a trigger!");
 		resumeTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertness;
 		state = State.Seeking;
+		motor = new Motor();
 
 	}
 
@@ -59,7 +60,7 @@ public class Thug : CharacterBase
 				if (Time.time < resumeTime)
 					return;
 
-				if (currentTarget != null)
+				if (motor.attackTarget != null)
 				{
 					state = State.Attack;
 					break;
@@ -88,8 +89,8 @@ public class Thug : CharacterBase
 					state = State.Seeking;
 					break;
 				}
-				movement.MoveTo(new StaticTarget(target.Value, (target.Value - transform.position).normalized));
-				//dodgeTime = Time.time + UnityEngine.Random.Range(minInspectionDelay, maxInspectionDelay) * alertnessFactor;
+				motor.movementTarget = new StaticTarget(target.Value, (target.Value - transform.position).normalized);
+				movement.MoveTo(motor.movementTarget);
 				state = State.Seeking;
 				break;
 
@@ -97,26 +98,35 @@ public class Thug : CharacterBase
 				this.Log("Target locked");
 				// TODO
 				state = State.Attacking;
+				movement.MoveTo(motor.movementTarget);
+				resumeTime = Time.time + (decisionDelay * alertness); // Longer wait time the more relentless!
 				break;
 
 			case State.Attacking:
-				if (currentTarget == null)
+				if (motor.attackTarget == null)
 				{
 					state = State.Attacked;
 					break;
 				}
 
-				FireAt(currentTarget);
+				FireAt(motor.attackTarget);
 
+				if (Time.time < resumeTime)
+					break;
 
+				// Raycast to see if the target is in line of sight
+				resumeTime = Time.time + (decisionDelay * alertness); // Longer wait time the more relentless 
 				if (!LockOn())
 				{
+					// Can't see target
 					state = State.Attacked;
 				}
 				break;
 
 			case State.Attacked:
-				// TODO - Reload?
+				// STOP Firing!!
+				StopFire();
+				motor.attackTarget = null;
 				state = State.Seeking;
 				break;
 		}
@@ -130,20 +140,33 @@ public class Thug : CharacterBase
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, detectionRadius))
 		{
-			var dyn = currentTarget as DynamicTarget;
+			var dyn = motor.attackTarget as DynamicTarget;
 			if (dyn != null && hit.transform == dyn.target)
 				return true;
 
 			var p = hit.collider.GetComponentInParent<Player>();
 			if (p != null)
 			{
-				currentTarget = new DynamicTarget(transform, hit.transform);
-				movement.MoveTo(new DynamicTarget(this.transform, hit.transform, hit.normal * targetOffset));
+				motor.attackTarget = GetTarget(hit.transform);
+				motor.movementTarget = GetMovementTarget(hit.transform, hit.normal * targetOffset);
+				//movement.MoveTo(GetMovementTarget(hit.transform, hit.normal * targetOffset));
 				return true;
 			}
 		}
 		return false;
 	}
+
+	private DynamicTarget GetTarget(Transform target)
+	{
+		return new DynamicTarget(transform, target);
+	}
+
+	private DynamicTarget GetMovementTarget(Transform target, Vector3 offset)
+	{
+		return new DynamicTarget(this.transform, target, offset);
+	}
+
+
 
 
 	protected override void OnDeath ()
@@ -183,10 +206,10 @@ public class Thug : CharacterBase
 
 	protected override void OnImpact (Bullet bullet)
 	{
-		var dyn = currentTarget as DynamicTarget;
+		var dyn = motor.attackTarget as DynamicTarget;
 		if (dyn == null || dyn.target != bullet.sender.transform)
 		{
-			currentTarget = new DynamicTarget(transform, bullet.sender.transform); // Return to sender
+			motor.attackTarget = GetTarget(bullet.sender.transform); // Return to sender
 		}
 
 

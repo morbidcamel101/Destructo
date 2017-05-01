@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\AI\CharacterBase.cs" />
      <Compile Include="Assets\AI\Health.cs" />
+     <Compile Include="Assets\AI\Motor.cs" />
      <Compile Include="Assets\AI\Player.cs" />
      <Compile Include="Assets\AI\Thug.cs" />
      <Compile Include="Assets\AI\ViewModels.cs" />
