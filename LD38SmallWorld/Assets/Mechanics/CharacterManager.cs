@@ -12,9 +12,19 @@ using UnityEngine.AI;
 public sealed class CharacterManager : BehaviorBase
 {
 	public enum State { Initializing, WaitingForDrop, CheckingSpawnPoints, Monitoring, Spawn, ResolvePath, WaveEnd };
+
+	[Serializable]
+	public class DifficultySetting
+	{
+		public Difficulty difficulty = Difficulty.Normal;
+		public float minStrengthMultiplier = 1f;
+		public float maxStrengthMultiplier = 3f;
+	}
+
 	public State state;
 	public float statusInterval = 1f;
 	public CharacterDefinition[] characters;
+	public DifficultySetting[] difficulty;
 	public float walkRadius = 1f;
 	public Prototype spawnPointPrefab;
 	public int spawnPointCount = 20;
@@ -48,6 +58,8 @@ public sealed class CharacterManager : BehaviorBase
 		restorePopulation = population;
 		Ensure(spawnPointPrefab);
 		Ensure(terrain);
+		this.Assert(difficulty.Length > 0, "There is no difficulties defined!");
+
 
 		foreach(var character in characters)
 		{
@@ -190,20 +202,14 @@ public sealed class CharacterManager : BehaviorBase
 
 	private void SetDifficulty()
 	{
-		switch(Difficulty)
+		for(int i = 0; i < difficulty.Length; i++)
 		{
-			case Difficulty.Easy:
-			minStrengthMultiplier = 1f;
-			maxStrengthMultiplier = 2f;
-			break;
-			case Difficulty.Normal:
-			minStrengthMultiplier = 1f;
-			maxStrengthMultiplier = 3f;
-			break;
-			case Difficulty.Extreme:
-			minStrengthMultiplier = 5f;
-			maxStrengthMultiplier = 15f;
-			break;
+			if (difficulty[i].difficulty == Difficulty)
+			{
+				this.minStrengthMultiplier = difficulty[i].minStrengthMultiplier;
+				this.maxStrengthMultiplier = difficulty[i].maxStrengthMultiplier;
+				return;
+			}
 		}
 	}
 
