@@ -12,8 +12,8 @@ Captain Destructo has never been killed until now….
 
 ## THE TEAM
 
-**MorbidCamel** - Cayman Islands 
-**MrKenzo** - California
+**MorbidCamel** 
+**MrKenzo** 
 
 We are very pleased with the result although with a little bit more time we could have unleashed the code! The code allows for amazing flexibility it was surreal to see it all come together so quickly in the end. We donate our journey to the public realm with the hopes of inspiring more indie developers to take the dare!
 
